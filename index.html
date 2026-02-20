@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Dashboard</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="mobile-header">
+        <button id="mobile-menu-btn" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-brand">CuentasClaras</div>
+    </div>
+
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h2>CuentasClaras</h2>
+            </div>
+
+            <div class="sidebar-content">
+                <nav class="sidebar-nav">
+                    <h4 data-i18n="sidebar_menu">Menú</h4>
+                    <a href="#" class="category-link active" data-i18n="header_overview">Resumen</a>
+                    <a href="#" id="open-budget-link" class="category-link" data-i18n="budget_title">Presupuestos</a>
+                    <button id="open-modal-btn" class="upload-btn" style="margin-top: 0.5rem; width: 100%;"
+                        data-i18n="sidebar_add">
+                        ➕ Nueva Transacción
+                    </button>
+                </nav>
+
+                <nav class="sidebar-nav">
+                    <h4 data-i18n="sidebar_actions">Acciones</h4>
+                    <div class="upload-container">
+                        <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
+                        <input type="file" id="csv-upload" accept=".csv" hidden>
+
+                        <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore">Importar
+                            Backup</label>
+                        <input type="file" id="json-restore" accept=".json" hidden>
+
+                        <button id="backup-btn" class="upload-btn secondary" data-i18n="btn_backup">Exportar
+                            Backup</button>
+                        <button id="csv-export-btn" class="upload-btn secondary" data-i18n="btn_csv_export">Exportar
+                            CSV</button>
+                        <button id="clear-data-btn" class="delete-all-btn" title="Borrar datos">
+                            🗑️ Borrar Todo
+                        </button>
+                    </div>
+                </nav>
+
+                <nav class="sidebar-nav">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h4 data-i18n="sidebar_categories" style="margin-bottom: 0;">Categorías</h4>
+                        <button id="manage-categories-btn" class="mini-btn" data-i18n-title="manage_categories_title"
+                            title="Gestionar Categorías">⚙️</button>
+                    </div>
+                    <div id="sidebar-categories" class="category-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="lang-switch-container">
+                        <span class="lang-label">ES</span>
+                        <label class="switch">
+                            <input type="checkbox" id="lang-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="lang-label">EN</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="header-main">
+                    <h1 data-i18n="header_overview">Resumen</h1>
+                    <div class="date-display" id="current-date">--/--/----</div>
+                </div>
+            </header>
+
+            <!-- Summary Cards -->
+            <section class="summary-cards">
+                <div class="card income">
+                    <h3 data-i18n="card_income">Ingresos Totales</h3>
+                    <p class="amount positive" id="total-income">$0.00</p>
+                </div>
+                <div class="card expense">
+                    <h3 data-i18n="card_expense">Gastos Totales</h3>
+                    <p class="amount negative" id="total-expense">$0.00</p>
+                </div>
+                <div class="card balance">
+                    <h3 data-i18n="card_balance">Balance Neto</h3>
+                    <p class="amount" id="net-balance">$0.00</p>
+                </div>
+            </section>
+
+            <!-- Financial Health Panel -->
+            <section class="health-metrics-grid">
+                <div class="health-card" id="card-savings-rate">
+                    <div class="health-icon">📈</div>
+                    <div class="health-info">
+                        <span data-i18n="metric_savings_rate">Tasa de Ahorro</span>
+                        <h4 id="health-savings-rate">0%</h4>
+                    </div>
+                </div>
+                <div class="health-card" id="card-runway">
+                    <div class="health-icon">🛡️</div>
+                    <div class="health-info">
+                        <span data-i18n="metric_runway">Reserva (Días)</span>
+                        <h4 id="health-runway">0</h4>
+                    </div>
+                </div>
+                <div class="health-card" id="card-ants">
+                    <div class="health-icon">🐜</div>
+                    <div class="health-info">
+                        <span data-i18n="metric_ant_expenses">Gastos Hormiga</span>
+                        <h4 id="health-ant-expenses">$0,00</h4>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Analysis Snapshot (Detailed Stats for selected month) -->
+            <section id="monthly-snapshot" class="card snapshot-container" style="display: none;">
+                <div class="snapshot-header">
+                    <h3 id="snapshot-title">Análisis del Mes</h3>
+                </div>
+                <div class="snapshot-grid">
+                    <div class="snapshot-item">
+                        <span data-i18n="card_income">Ingresos</span>
+                        <div class="snapshot-value-wrapper">
+                            <span id="month-income" class="snapshot-amount positive">$0,00</span>
+                            <div id="trend-income" class="trend-badge-inline"></div>
+                        </div>
+                    </div>
+                    <div class="snapshot-item">
+                        <span data-i18n="card_expense">Gastos</span>
+                        <div class="snapshot-value-wrapper">
+                            <span id="month-expense" class="snapshot-amount negative">$0,00</span>
+                            <div id="trend-expense" class="trend-badge-inline"></div>
+                        </div>
+                    </div>
+                    <div class="snapshot-item">
+                        <span data-i18n="card_balance">Balance</span>
+                        <div class="snapshot-value-wrapper">
+                            <span id="month-balance" class="snapshot-amount">$0,00</span>
+                            <div id="trend-balance" class="trend-badge-inline"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="card chart-container">
+                    <h3 data-i18n="chart_title">Evolución Mensual</h3>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+                <div class="card chart-container">
+                    <h3 data-i18n="chart_categories">Gastos por Categoría</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </section>
+
+            <section class="charts-section full-width">
+                <div class="card chart-container large">
+                    <h3 data-i18n="chart_net_worth">Patrimonio Neto (Saldo Acumulado)</h3>
+                    <canvas id="netWorthChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Transactions Table -->
+            <section class="transactions-section">
+                <div class="section-header">
+                    <div class="header-main">
+                        <h3 data-i18n="table_title">Transacciones Recientes</h3>
+                        <button id="btn-reset-filters" class="badge-btn active-filter-badge" style="display: none;">
+                            <span id="filter-status-label"></span>
+                            <span class="close-icon">×</span>
+                        </button>
+                    </div>
+                    <div class="filters-container">
+                        <select id="month-filter">
+                            <option value="all" data-i18n="filter_all">Todos los Meses</option>
+                        </select>
+                        <select id="category-filter">
+                            <option value="all" data-i18n="filter_all_cats">Todas las Categorías</option>
+                        </select>
+                        <input type="text" id="search-input" placeholder="Buscar..."
+                            data-i18n-placeholder="search_placeholder">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="col_date">Fecha</th>
+                                <th data-i18n="col_desc">Descripción</th>
+                                <th data-i18n="col_amount">Monto</th>
+                                <th data-i18n="col_type">Tipo</th>
+                                <th data-i18n="col_action" class="col-action">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="modal-title" data-i18n="sidebar_add">Nueva Transacción</h3>
+            <form id="transaction-form">
+                <div class="form-group">
+                    <label data-i18n="form_date">Fecha</label>
+                    <input type="date" id="tx-date" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_desc">Descripción</label>
+                    <input type="text" id="tx-desc" placeholder="Ej: Café en Starbucks" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_amount">Monto</label>
+                    <input type="number" id="tx-amount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_cat">Categoría</label>
+                    <select id="tx-cat" required>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="close-modal-btn" class="upload-btn secondary"
+                        data-i18n="btn_cancel">Cancelar</button>
+                    <button type="submit" class="upload-btn" data-i18n="btn_save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Budget Configuration Modal -->
+    <div id="budget-modal" class="modal">
+        <div class="modal-content large">
+            <h3 data-i18n="budget_title">Configurar Presupuestos</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;"
+                data-i18n="budget_modal_help">
+                Define tus límites de gasto mensual por categoría.
+            </p>
+            <div id="budget-config-list" class="budget-config-grid">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="close-budget-modal-btn" class="upload-btn secondary"
+                    data-i18n="btn_cancel">Cerrar</button>
+                <button type="button" id="save-all-budgets-btn" class="upload-btn" data-i18n="btn_save">Guardar
+                    Todo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Management Modal -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content large">
+            <h3 data-i18n="manage_categories_title">Gestionar Categorías</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;"
+                data-i18n="category_modal_help">
+                Añade o edita categorías y sus palabras clave para auto-categorización.
+            </p>
+
+            <div class="category-manager-header">
+                <input type="text" id="new-category-name" placeholder="Nueva Categoría"
+                    data-i18n-placeholder="placeholder_new_cat">
+                <button id="add-category-btn" class="upload-btn" data-i18n-title="msg_category_added"
+                    title="Añadir Categoría">➕</button>
+            </div>
+
+            <div id="category-manager-list" class="category-manager-list">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" id="close-category-modal-btn" class="upload-btn secondary"
+                    data-i18n="btn_close">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
