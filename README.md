@@ -10,15 +10,6 @@
 - **Privacidad Total**: Tus datos financieros se procesan y guardan localmente en tu navegador.
 - **Multilingüe**: Soporte para Español e Inglés.
 
-## 🚀 Despliegue en GitHub Pages
-
-Esta aplicación está lista para ser desplegada en GitHub Pages.
-
-1. **Crea un nuevo repositorio** en GitHub llamado `PersonalFinance`.
-2. **Sube los archivos** siguiendo las instrucciones en la terminal (ver abajo).
-3. En GitHub, ve a **Settings > Pages**.
-4. En **Build and deployment**, selecciona la rama `main` y la carpeta `/ (root)`.
-5. ¡Listo! Tu app estará disponible en `https://tu-usuario.github.io/PersonalFinance/`.
 
 ## 🛠️ Desarrollo
 
