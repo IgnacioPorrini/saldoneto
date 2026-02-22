@@ -10,6 +10,7 @@ const searchInput = document.getElementById('search-input');
 const sidebarCategories = document.getElementById('sidebar-categories');
 const langToggle = document.getElementById('lang-toggle');
 const csvUpload = document.getElementById('csv-upload');
+const brouExcelUpload = document.getElementById('brou-excel-upload');
 const jsonRestore = document.getElementById('json-restore');
 const clearDataBtn = document.getElementById('clear-data-btn');
 const backupBtn = document.getElementById('backup-btn');
@@ -44,6 +45,9 @@ const healthRunwayEl = document.getElementById('health-runway');
 const healthAntExpensesEl = document.getElementById('health-ant-expenses');
 const btnResetFilters = document.getElementById('btn-reset-filters');
 const filterStatusLabel = document.getElementById('filter-status-label');
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+const pageInfoEl = document.getElementById('page-info');
 
 
 // State
@@ -54,6 +58,8 @@ let netWorthChart = null;
 let currentFinanceData = null;
 let transactionCache = []; // Store raw transactions for re-processing
 let currentSmartFilter = null; // 'ant-expenses' or null
+let currentPage = 1;
+const ITEMS_PER_PAGE = 25;
 const ANT_THRESHOLD = 150;
 const STORAGE_KEY = 'finance_data_v1';
 const BUDGET_KEY = 'finance_budgets_v1';
@@ -137,11 +143,13 @@ const translations = {
         cat_Otros: "Otros",
 
         btn_import: "Importar CSV",
+        btn_import_brou: "Importar Excel BROU",
         btn_clear: "Borrar Todo",
         confirm_clear: "¿Estás seguro de que deseas borrar todos los datos?",
         confirm_delete: "¿Borrar esta transacción?",
         msg_data_cleared: "Datos borrados correctamente",
         error_no_transactions: "No se encontraron transacciones válidas",
+        msg_brou_imported: "Excel del BROU importado con éxito",
         filter_all_cats: "Todas las Categorías",
         search_placeholder: "Buscar por descripción...",
         no_results: "No se encontraron transacciones.",
@@ -192,7 +200,9 @@ const translations = {
         metric_ant_expenses: "Gastos Hormiga",
         metric_runway_desc: "Días de vida con saldo actual",
         filter_ants_active: "Solo Gastos Hormiga",
-        filter_clear_all: "Ver Resumen / Quitar Filtros"
+        filter_clear_all: "Ver Resumen / Quitar Filtros",
+        btn_prev: "Anterior",
+        btn_next_pg: "Siguiente"
     },
     en: {
         header_overview: "Overview",
@@ -228,6 +238,7 @@ const translations = {
         cat_Otros: "Other",
 
         btn_import: "Import CSV",
+        btn_import_brou: "Import BROU Excel",
         btn_clear: "Clear All",
         confirm_clear: "Are you sure you want to delete all data?",
         confirm_delete: "Delete this transaction?",
@@ -282,7 +293,9 @@ const translations = {
         metric_ant_expenses: "Ant Expenses",
         metric_runway_desc: "Days covered by current balance",
         filter_ants_active: "Only Ant Expenses",
-        filter_clear_all: "View Summary / Clear Filters"
+        filter_clear_all: "View Summary / Clear Filters",
+        btn_prev: "Previous",
+        btn_next_pg: "Next"
     }
 };
 
@@ -309,6 +322,10 @@ const init = async () => {
     // Upload Listener
     if (csvUpload) {
         csvUpload.addEventListener('change', handleFileUpload);
+    }
+
+    if (brouExcelUpload) {
+        brouExcelUpload.addEventListener('change', handleBROUUpload);
     }
 
     // Clear Data Listener
@@ -435,6 +452,7 @@ const init = async () => {
     if (monthFilter) {
         monthFilter.addEventListener('change', () => {
             if (budgetMonthFilter) budgetMonthFilter.value = monthFilter.value;
+            currentPage = 1; // Reset page on month change
             filterData();
         });
     }
@@ -445,10 +463,32 @@ const init = async () => {
         });
     }
     if (categoryFilter) {
-        categoryFilter.addEventListener('change', filterData);
+        categoryFilter.addEventListener('change', () => {
+            currentPage = 1;
+            filterData();
+        });
     }
     if (searchInput) {
-        searchInput.addEventListener('input', filterData);
+        searchInput.addEventListener('input', () => {
+            currentPage = 1; // Reset to page 1 on search
+            filterData();
+        });
+    }
+
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                filterData();
+            }
+        });
+    }
+
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener('click', () => {
+            currentPage++;
+            filterData();
+        });
     }
 
     // Apply initial language
@@ -1268,10 +1308,26 @@ const renderTransactions = (monthlyData, filterMonth = 'all', filterCat = 'all',
     // Sort by date desc
     const sorted = filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    // Limit to 100 for display performance
-    const displayList = (filterMonth === 'all' && filterCat === 'all' && !query)
-        ? sorted.slice(0, 100)
-        : sorted;
+    // Pagination Logic
+    const totalItems = sorted.length;
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+
+    // Ensure currentPage is valid if filter changed
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIdx = startIdx + ITEMS_PER_PAGE;
+    const displayList = sorted.slice(startIdx, endIdx);
+
+    // Update Pagination UI
+    if (pageInfoEl) {
+        pageInfoEl.textContent = currentLang === 'es'
+            ? `Página ${currentPage} de ${totalPages}`
+            : `Page ${currentPage} of ${totalPages}`;
+    }
+    if (prevPageBtn) prevPageBtn.disabled = currentPage === 1;
+    if (nextPageBtn) nextPageBtn.disabled = currentPage === totalPages;
 
     if (displayList.length === 0) {
         const row = document.createElement('tr');
@@ -1566,6 +1622,143 @@ const reprocessData = () => {
     currentFinanceData = newData;
     saveToLocalStorage(newData);
     renderDashboard(newData);
+};
+
+// BROU Excel Parsing Logic
+const handleBROUUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        processBROUExcelData(workbook);
+    };
+    reader.readAsArrayBuffer(file);
+};
+
+const processBROUExcelData = (workbook) => {
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    // Convert to 2D array
+    const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    console.log("Processing BROU Excel. Total rows found:", rawRows.length);
+
+    // Find Header Row (where "Fecha" AND "Concepto" exist)
+    let headerIndex = -1;
+    for (let i = 0; i < rawRows.length; i++) {
+        const row = rawRows[i];
+        if (row && row.length > 3) { // Require at least 4 columns for a real table
+            const rowStr = row.join(' ').toLowerCase();
+            const hasFecha = rowStr.includes('fecha') || rowStr.includes('f. mov');
+            const hasConcepto = rowStr.includes('concepto') || rowStr.includes('asunto') || rowStr.includes('descripcion');
+
+            if (hasFecha && hasConcepto) {
+                headerIndex = i;
+                break;
+            }
+        }
+    }
+
+    if (headerIndex === -1) {
+        console.error("Could not find header row in Excel");
+        showToast(getTrans('error_no_transactions'), 'error');
+        return;
+    }
+
+    const rawHeaders = Array.from(rawRows[headerIndex] || []).map(h => h ? h.toString().trim() : '');
+    console.log("Detected headers:", rawHeaders);
+
+    const norm = (s) => s ? s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
+    // Map columns identifying by keywords (normalized)
+    const colMap = {
+        date: rawHeaders.findIndex(h => norm(h).includes('fecha') || norm(h).includes('f. mov')),
+        desc: rawHeaders.findIndex(h => norm(h).includes('descripcion') || norm(h).includes('concepto') || norm(h).includes('asunto') || norm(h).includes('detalle')),
+        debit: rawHeaders.findIndex(h => norm(h).includes('debito')),
+        credit: rawHeaders.findIndex(h => norm(h).includes('credito'))
+    };
+
+    console.log("Column Mapping:", colMap);
+
+    const dataRows = rawRows.slice(headerIndex + 1);
+    const transactions = [];
+
+    dataRows.forEach((row, idx) => {
+        if (!row || row.length < 2) return;
+
+        const dateRaw = row[colMap.date];
+        if (!dateRaw) return;
+
+        let dateStr = '';
+        if (typeof dateRaw === 'string') {
+            const parts = dateRaw.split('/');
+            if (parts.length === 3) {
+                // Handle DD/MM/YYYY or DD/MM/YY
+                const day = parts[0].padStart(2, '0');
+                const month = parts[1].padStart(2, '0');
+                let year = parts[2];
+                if (year.length === 2) year = '20' + year;
+                dateStr = `${year}-${month}-${day}`;
+            }
+        } else if (dateRaw instanceof Date) {
+            dateStr = dateRaw.toISOString().split('T')[0];
+        } else if (typeof dateRaw === 'number') {
+            // Excel numeric date (offset from 1899-12-30)
+            const date = new Date(Math.round((dateRaw - 25569) * 864e5));
+            if (!isNaN(date.getTime())) dateStr = date.toISOString().split('T')[0];
+        }
+
+        if (!dateStr || isNaN(new Date(dateStr).getTime())) return;
+
+        const description = (row[colMap.desc] || '').toString().trim();
+
+        // Skip footer or invalid lines
+        if (description.length > 250 || description.toLowerCase().includes('el brou no se responsabiliza')) return;
+        if (!description && !row[colMap.debit] && !row[colMap.credit]) return;
+
+        const parseExcelAmount = (val) => {
+            if (typeof val === 'number') return val;
+            if (typeof val === 'string') {
+                // Remove thousands separator (dot) and change decimal separator (comma) to dot
+                // Standard BROU XLS format: 1.234,56
+                const clean = val.replace(/\./g, '').replace(',', '.').trim();
+                return parseFloat(clean) || 0;
+            }
+            return 0;
+        };
+
+        const debit = parseExcelAmount(row[colMap.debit]);
+        const credit = parseExcelAmount(row[colMap.credit]);
+        const amount = credit - debit;
+
+        if (amount === 0 && !description) return;
+
+        let category = getCategory(description);
+        if (amount > 0 && category === 'Otros') category = 'Ingresos';
+
+        transactions.push({
+            id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+            date: dateStr,
+            description: description,
+            amount: amount,
+            type: amount < 0 ? 'expense' : 'income',
+            category: category
+        });
+    });
+
+    if (transactions.length === 0) {
+        console.warn("No transactions were validated in the process");
+        showToast(getTrans('error_no_transactions'), 'error');
+        return;
+    }
+
+    console.log(`Successfully parsed ${transactions.length} transactions`);
+    transactionCache = transactions;
+    reprocessData();
+    showToast(getTrans('msg_brou_imported'), 'success');
 };
 
 // CSV Parsing Logic

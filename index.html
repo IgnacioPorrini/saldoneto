@@ -14,6 +14,9 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- SheetJS for Excel Support -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -53,6 +56,10 @@
                     <div class="upload-container">
                         <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
                         <input type="file" id="csv-upload" accept=".csv" hidden>
+
+                        <label for="brou-excel-upload" class="upload-btn" data-i18n="btn_import_brou">Importar Excel
+                            BROU</label>
+                        <input type="file" id="brou-excel-upload" accept=".xls,.xlsx" hidden>
 
                         <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore">Importar
                             Backup</label>
@@ -228,6 +235,16 @@
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
+                </div>
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <button id="prev-page" class="pg-btn">
+                        <span>←</span> <span data-i18n="btn_prev">Anterior</span>
+                    </button>
+                    <span id="page-info">Página 1 de 1</span>
+                    <button id="next-page" class="pg-btn">
+                        <span data-i18n="btn_next_pg">Siguiente</span> <span>→</span>
+                    </button>
                 </div>
             </section>
         </main>
