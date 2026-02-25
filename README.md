@@ -11,19 +11,21 @@
 
 ## 🚀 Características
 
+- 💡 **Inteligencia de Patrones**: Detección automática de gastos recurrentes (suscripciones, servicios) y ranking de mayores consumos mensuales.
 - 📊 **Dashboard Dinámico**: Visualización de ingresos, gastos y balance neto con gráficos interactivos.
 - 🐜 **Análisis de Gastos Hormiga**: Identificación inteligente de pequeños gastos que drenan tu presupuesto.
-- 📅 **Evolución Mensual**: Comparativa intermensual para entender tendencias de ahorro.
-- 📦 **Gestión de Datos**: Exporta copias de seguridad en JSON o tus datos procesados a CSV/Excel.
-- 🌐 **Multi-idioma**: Disponible en Español e Inglés.
-
 
 ## 🛠️ Desarrollo
 
-Los archivos principales están en la raíz:
-- `index.html`: Estructura de la aplicación.
-- `app.js`: Lógica de procesamiento y visualización.
-- `style.css`: Diseño premium y responsivo.
+La aplicación está construida con **JavaScript Vanilla** (ES Modules) para garantizar velocidad y cero dependencias pesadas:
+
+- `main.js`: Punto de entrada e inicialización de la aplicación.
+- `data.js`: Motor de procesamiento de datos e importadores (BROU/Excel/CSV).
+- `ui.js`: Controladores de la interfaz y renderizado de componentes.
+- `charts.js`: Lógica de visualización de gráficos (Chart.js wrapper).
+- `storage.js`: Capa de persistencia local.
+- `i18n.js`: Sistema de internacionalización (ES/EN).
+- `style.css`: Diseño premium, responsivo y con estética glassmorphism.
 
 ---
 *Hecho con ❤️ por Ignacio Porrini*
