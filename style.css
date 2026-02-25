@@ -1824,3 +1824,90 @@ tr:hover {
         height: 36px;
     }
 }
+
+/* Trend Badges */
+.trend-badge-inline {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    margin-left: 0.5rem;
+}
+
+.trend-badge-inline.positive {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+}
+
+.trend-badge-inline.negative {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+/* UI List Items */
+.snapshot-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    animation: slideInUp 0.3s ease forwards;
+    opacity: 0;
+}
+
+.snapshot-item-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.snapshot-item-title {
+    font-weight: 500;
+    color: var(--text-primary);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+.snapshot-item-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.snapshot-item-amount {
+    font-weight: 700;
+    color: var(--danger-color);
+}
+
+.recurring-card {
+    opacity: 0;
+    animation: slideInUp 0.4s ease forwards;
+}
+
+/* Animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.analytics-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    animation: slideInUp 0.3s ease forwards;
+    opacity: 0;
+}

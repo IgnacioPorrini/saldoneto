@@ -168,11 +168,69 @@ export const updateMonthlySnapshot = (financeData, filterMonth, getTrans) => {
     const expenseEl = document.getElementById('month-expense');
     const balanceEl = document.getElementById('month-balance');
 
+    // Trending Calculations
+    const currentIdx = financeData.monthly.findIndex(m => m.month === filterMonth);
+    const prevMonth = financeData.monthly[currentIdx + 1]; // Data is sorted by date desc
+
+    const updateTrend = (id, current, previous, inverse = false) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = '';
+        if (!previous) return;
+
+        const diff = current - previous;
+        const percent = previous !== 0 ? (diff / Math.abs(previous)) * 100 : 0;
+        if (Math.abs(percent) < 0.1) return;
+
+        const isPositive = percent > 0;
+        const isBetter = inverse ? !isPositive : isPositive;
+
+        const badge = document.createElement('span');
+        badge.className = `trend-badge-inline ${isBetter ? 'positive' : 'negative'}`;
+        badge.innerHTML = `${isPositive ? '↑' : '↓'} ${Math.abs(percent).toFixed(1)}%`;
+        el.appendChild(badge);
+    };
+
+    updateTrend('trend-income', monthObj.income, prevMonth?.income);
+    updateTrend('trend-expense', monthObj.expense, prevMonth?.expense, true);
+    updateTrend('trend-balance', monthObj.balance, prevMonth?.balance);
+
     if (incomeEl) incomeEl.textContent = formatCurrency(monthObj.income);
     if (expenseEl) expenseEl.textContent = formatCurrency(monthObj.expense);
     if (balanceEl) {
         balanceEl.textContent = formatCurrency(monthObj.balance);
         balanceEl.className = 'snapshot-amount ' + (monthObj.balance >= 0 ? 'positive' : 'negative');
+    }
+
+    // Render Top Expenses
+    const topListEl = document.getElementById('top-expenses-list');
+    if (topListEl) {
+        topListEl.innerHTML = '';
+        if (monthObj.topExpenses && monthObj.topExpenses.length > 0) {
+            monthObj.topExpenses.forEach((t, idx) => {
+                const item = document.createElement('div');
+                item.className = 'snapshot-list-item';
+                item.style.animationDelay = `${idx * 0.05}s`;
+
+                const left = document.createElement('div');
+                left.className = 'snapshot-item-left';
+                const catLabel = getTrans(`cat_${t.category}`) || t.category;
+                left.innerHTML = `
+                    <span class="snapshot-item-title">${t.description}</span>
+                    <span class="snapshot-item-subtitle">${catLabel}</span>
+                `;
+
+                const right = document.createElement('span');
+                right.className = 'snapshot-item-amount';
+                right.textContent = formatCurrency(t.amount);
+
+                item.appendChild(left);
+                item.appendChild(right);
+                topListEl.appendChild(item);
+            });
+        } else {
+            topListEl.innerHTML = `<div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem;">No hay gastos registrados</div>`;
+        }
     }
 };
 
@@ -189,6 +247,7 @@ export const renderRecurringExpenses = (recurring, getTrans) => {
     recurring.forEach(item => {
         const card = document.createElement('div');
         card.className = 'recurring-card';
+        card.style.animationDelay = `${recurring.indexOf(item) * 0.1}s`;
         card.innerHTML = `
             <div class="recurring-card-header">
                 <h4>${item.description}</h4>
@@ -216,13 +275,8 @@ export const renderTopExpensesInModal = (topExpenses, getTrans) => {
 
     topExpenses.forEach((t, idx) => {
         const item = document.createElement('div');
-        item.style.display = 'flex';
-        item.style.justifyContent = 'space-between';
-        item.style.alignItems = 'center';
-        item.style.padding = '0.8rem';
-        item.style.background = 'rgba(255,255,255,0.03)';
-        item.style.borderRadius = '10px';
-        item.style.fontSize = '0.9rem';
+        item.className = 'analytics-item';
+        item.style.animationDelay = `${idx * 0.05}s`;
         item.innerHTML = `
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <span style="color: var(--accent-color); font-weight: 800; font-size: 0.8rem; width: 1.5rem;">#${idx + 1}</span>

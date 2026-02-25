@@ -64,7 +64,7 @@ export const translations = {
         msg_updated: "Transacción actualizada",
         modal_edit_title: "Editar Transacción",
         modal_add_title: "Nueva Transacción",
-        budget_title: "Presupuestos por Categoría",
+        budget_title: "Planificar Presupuestos",
         budget_set: "Definir",
         budget_record: "Meta",
         budget_used: "usado",
@@ -112,7 +112,7 @@ export const translations = {
         recurring_freq: "Frecuencia:",
         top_expenses_title: "Mayores Gastos",
         no_expenses: "Sin gastos para este periodo",
-        insights_title: "Inteligencia de Patrones",
+        insights_title: "Explorar Patrones",
         insights_help: "Análisis automático de tus hábitos financieros y gastos fijos registrados."
     },
     en: {
@@ -178,7 +178,7 @@ export const translations = {
         msg_updated: "Transaction updated",
         modal_edit_title: "Edit Transaction",
         modal_add_title: "New Transaction",
-        budget_title: "Category Budgets",
+        budget_title: "Plan Budgets",
         budget_set: "Set",
         budget_used: "used",
         msg_budget_saved: "Budgets updated",
@@ -225,7 +225,7 @@ export const translations = {
         recurring_freq: "Frequency:",
         top_expenses_title: "Top Expenses",
         no_expenses: "No expenses for this period",
-        insights_title: "Pattern Intelligence",
+        insights_title: "Explore Patterns",
         insights_help: "Automated analysis of your financial habits and registered fixed expenses."
     }
 };

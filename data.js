@@ -21,6 +21,14 @@ export const setCurrentFinanceData = (data) => {
     currentFinanceData = data;
 };
 
+export const generateTxHash = (tx) => {
+    if (!tx) return '';
+    const cleanDesc = (tx.description || '').trim().toUpperCase();
+    const cleanAmount = parseFloat(tx.amount || 0).toFixed(2);
+    const date = tx.date || '';
+    return `${date}|${cleanDesc}|${cleanAmount}`;
+};
+
 export const getCategory = (description, categoriesConfig) => {
     if (!description) return 'Otros';
     const desc = description.toUpperCase();
@@ -289,6 +297,7 @@ export const processCSVData = (csvText, categoriesConfig) => {
         return isNaN(num) ? 0 : num;
     };
 
+    const existingHashes = new Set(transactionCache.map(t => generateTxHash(t)));
     const transactions = [];
     lines.slice(headerIndex + 1).forEach((line, idx) => {
         const parts = splitLine(line, csvDelimiter);
@@ -316,14 +325,20 @@ export const processCSVData = (csvText, categoriesConfig) => {
         let category = getCategory(description, categoriesConfig);
         if (amount > 0 && category === 'Otros') category = 'Ingresos';
 
-        transactions.push({
+        const tx = {
             id: `csv-${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 5)}`,
             date,
             description,
             amount,
             type: amount < 0 ? 'expense' : 'income',
             category
-        });
+        };
+
+        const hash = generateTxHash(tx);
+        if (!existingHashes.has(hash)) {
+            transactions.push(tx);
+            existingHashes.add(hash); // Avoid duplicates within the same file too
+        }
     });
 
     console.log(`[CSV-IMPORT] Processed ${transactions.length} rows successfully.`);
@@ -363,6 +378,7 @@ export const processBROUExcelData = (workbook, categoriesConfig) => {
 
     const dataRows = rawRows.slice(headerIndex + 1);
     const transactions = [];
+    const existingHashes = new Set(transactionCache.map(t => generateTxHash(t)));
 
     dataRows.forEach((row) => {
         if (!row || row.length < 2) return;
@@ -410,14 +426,20 @@ export const processBROUExcelData = (workbook, categoriesConfig) => {
         let category = getCategory(description, categoriesConfig);
         if (amount > 0 && category === 'Otros') category = 'Ingresos';
 
-        transactions.push({
+        const tx = {
             id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
             date: dateStr,
             description,
             amount,
             type: amount < 0 ? 'expense' : 'income',
             category
-        });
+        };
+
+        const hash = generateTxHash(tx);
+        if (!existingHashes.has(hash)) {
+            transactions.push(tx);
+            existingHashes.add(hash);
+        }
     });
 
     return transactions;

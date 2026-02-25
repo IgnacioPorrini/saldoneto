@@ -23,6 +23,7 @@ let currentPage = 1;
 const ITEMS_PER_PAGE = 25;
 let ANT_THRESHOLD = storage.loadAntThreshold();
 let editingTxId = null;
+let searchTimeout = null;
 
 const openBudgetModal = (e) => {
     if (e) e.preventDefault();
@@ -293,6 +294,7 @@ const populateFilters = () => {
 };
 
 const refreshData = () => {
+    data.setTransactionCache(transactions);
     currentFinanceData = data.reprocessData(transactions, categoriesConfig);
     storage.saveToLocalStorage(currentFinanceData);
     populateFilters();
@@ -410,6 +412,7 @@ const init = () => {
 
         // Populate Filters
         populateFilters();
+        data.setTransactionCache(transactions);
 
         if (currentFinanceData && currentFinanceData.summary) {
             renderDashboard(currentFinanceData);
@@ -421,7 +424,15 @@ const init = () => {
         // Event Listeners - Safely attached
         if (monthFilter) monthFilter.addEventListener('change', () => { currentPage = 1; filterData(); });
         if (categoryFilter) categoryFilter.addEventListener('change', () => { currentPage = 1; filterData(); });
-        if (searchInput) searchInput.addEventListener('input', () => { currentPage = 1; filterData(); });
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    filterData();
+                }, 250);
+            });
+        }
         if (prevPageBtn) prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; filterData(); } });
         if (nextPageBtn) nextPageBtn.addEventListener('click', () => { currentPage++; filterData(); });
 
@@ -517,30 +528,78 @@ const init = () => {
         if (backupBtn) {
             backupBtn.addEventListener('click', () => {
                 if (!currentFinanceData) return;
-                const blob = new Blob([JSON.stringify(currentFinanceData, null, 2)], { type: 'application/json' });
+
+                // Create a full package backup
+                const fullBackup = {
+                    version: '1.1',
+                    timestamp: new Date().toISOString(),
+                    data: currentFinanceData,
+                    categories: categoriesConfig,
+                    budgets: storage.loadBudgets(),
+                    antThreshold: ANT_THRESHOLD
+                };
+
+                const blob = new Blob([JSON.stringify(fullBackup, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `CuentasClaras_Backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.download = `CuentasClaras_FullBackup_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
                 ui.showToast(i18n.getTrans('msg_backup_done'), 'success');
             });
         }
 
-        const csvExportBtn = document.getElementById('csv-export-btn');
-        if (csvExportBtn) {
-            csvExportBtn.addEventListener('click', () => {
-                if (transactions.length === 0) return;
-                const headers = ['Date', 'Description', 'Amount', 'Type', 'Category'];
-                const rows = transactions.map(t => [t.date, `"${t.description}"`, t.amount, t.type, t.category]);
-                const csvContent = [headers, ...rows].map(e => e.join(";")).join("\n");
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `CuentasClaras_Export_${new Date().toISOString().split('T')[0]}.csv`;
-                a.click();
-                ui.showToast(i18n.getTrans('msg_csv_done'), 'success');
+        const jsonRestore = document.getElementById('json-restore');
+        if (jsonRestore) {
+            jsonRestore.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+
+                        // Validate and Restore
+                        if (imported.categories) {
+                            categoriesConfig = imported.categories;
+                            storage.saveCategoriesConfig(categoriesConfig);
+                        }
+                        if (imported.budgets) {
+                            storage.saveBudgets(imported.budgets);
+                        }
+                        if (imported.antThreshold) {
+                            ANT_THRESHOLD = imported.antThreshold;
+                            storage.saveAntThreshold(ANT_THRESHOLD);
+                        }
+
+                        // Restore Transactions
+                        let newTxs = [];
+                        if (imported.data && imported.data.monthly) {
+                            newTxs = imported.data.monthly.flatMap(m => m.transactions);
+                        } else if (Array.isArray(imported)) {
+                            // Support legacy format if just an array of transactions
+                            newTxs = imported;
+                        } else if (imported.transactions) {
+                            newTxs = imported.transactions;
+                        }
+
+                        if (newTxs.length > 0) {
+                            transactions = newTxs;
+                            refreshData();
+                            ui.showToast(i18n.getTrans('msg_added'), 'success');
+                            // Close modal
+                            const modal = document.getElementById('data-modal');
+                            if (modal) modal.classList.remove('active');
+                        } else {
+                            ui.showToast(i18n.getTrans('error_no_transactions'), 'error');
+                        }
+                    } catch (err) {
+                        console.error('Backup Restore Failed:', err);
+                        ui.showToast('Error al importar backup', 'error');
+                    }
+                };
+                reader.readAsText(file);
             });
         }
 
