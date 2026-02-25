@@ -1,14 +1,21 @@
-# CuentasClaras 🚀
+# 🏦 CuentasClaras - Finanzas Personales con Privacidad Total
 
-**CuentasClaras** es una aplicación web estática para la gestión de finanzas personales, diseñada para ser rápida, privada y visualmente impactante.
+**CuentasClaras** es una herramienta de gestión financiera diseñada para usuarios que valoran su privacidad por encima de todo. A diferencia de otras aplicaciones, **CuentasClaras no tiene nube ni servidores**: todo el procesamiento, almacenamiento y análisis ocurre exclusivamente en tu navegador. Tus datos bancarios nunca salen de tu dispositivo.
 
-## ✨ Características
+## ✨ Filosofía y Diferenciadores
 
-- **Importación de CSV**: Carga tus estados de cuenta bancarios directamente.
-- **Salud Financiera**: Visualiza tu tasa de ahorro, reserva financiera y gastos hormiga.
-- **Gráficos Interactivos**: Explora tus datos haciendo clic en el gráfico de evolución o categorías.
-- **Privacidad Total**: Tus datos financieros se procesan y guardan localmente en tu navegador.
-- **Multilingüe**: Soporte para Español e Inglés.
+- **Privacidad por Diseño**: Sin registros, sin trackers, sin servidores externos. La base de datos es tu propio navegador (`localStorage`).
+- **Enfoque Uruguayo**: Soporte nativo para la importación directa de archivos Excel del **BROU** (e-BROU), manejando automáticamente encabezados y leyendas legales.
+- **Bimonetarismo (Próximamente)**: Diseñado pensando en la realidad económica del Río de la Plata.
+- **Transparencia Total**: Código abierto y funcional incluso sin conexión a internet.
+
+## 🚀 Características
+
+- 📊 **Dashboard Dinámico**: Visualización de ingresos, gastos y balance neto con gráficos interactivos.
+- 🐜 **Análisis de Gastos Hormiga**: Identificación inteligente de pequeños gastos que drenan tu presupuesto.
+- 📅 **Evolución Mensual**: Comparativa intermensual para entender tendencias de ahorro.
+- 📦 **Gestión de Datos**: Exporta copias de seguridad en JSON o tus datos procesados a CSV/Excel.
+- 🌐 **Multi-idioma**: Disponible en Español e Inglés.
 
 
 ## 🛠️ Desarrollo
@@ -19,4 +26,4 @@ Los archivos principales están en la raíz:
 - `style.css`: Diseño premium y responsivo.
 
 ---
-*Hecho con ❤️ por Antigravity*
+*Hecho con ❤️ por Ignacio Porrini*

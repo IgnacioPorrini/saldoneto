@@ -9,19 +9,24 @@
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- SheetJS for Excel Support -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script type="module" src="main.js"></script>
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <div id="toast-container" class="toast-container"></div>
     <div class="mobile-header">
         <button id="mobile-menu-btn" class="hamburger">
             <span></span>
@@ -38,56 +43,51 @@
         <aside class="sidebar">
             <div class="brand">
                 <h2>CuentasClaras</h2>
+                <a href="https://IgnacioPorrini.com" target="_blank" class="developer-credit">
+                    by IgnacioPorrini.com
+                </a>
             </div>
 
             <div class="sidebar-content">
-                <nav class="sidebar-nav">
-                    <h4 data-i18n="sidebar_menu">Menú</h4>
-                    <a href="#" class="category-link active" data-i18n="header_overview">Resumen</a>
-                    <a href="#" id="open-budget-link" class="category-link" data-i18n="budget_title">Presupuestos</a>
-                    <button id="open-modal-btn" class="upload-btn" style="margin-top: 0.5rem; width: 100%;"
-                        data-i18n="sidebar_add">
-                        ➕ Nueva Transacción
+                <div class="primary-action-container">
+                    <button id="open-modal-btn" class="main-action-btn">
+                        <span>➕</span>
+                        <span data-i18n="sidebar_add">Nueva Transacción</span>
                     </button>
-                </nav>
+                </div>
 
                 <nav class="sidebar-nav">
-                    <h4 data-i18n="sidebar_actions">Acciones</h4>
-                    <div class="upload-container">
-                        <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
-                        <input type="file" id="csv-upload" accept=".csv" hidden>
-
-                        <label for="brou-excel-upload" class="upload-btn" data-i18n="btn_import_brou">Importar Excel
-                            BROU</label>
-                        <input type="file" id="brou-excel-upload" accept=".xls,.xlsx" hidden>
-
-                        <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore">Importar
-                            Backup</label>
-                        <input type="file" id="json-restore" accept=".json" hidden>
-
-                        <button id="backup-btn" class="upload-btn secondary" data-i18n="btn_backup">Exportar
-                            Backup</button>
-                        <button id="csv-export-btn" class="upload-btn secondary" data-i18n="btn_csv_export">Exportar
-                            CSV</button>
-                        <button id="clear-data-btn" class="delete-all-btn" title="Borrar datos">
-                            🗑️ Borrar Todo
-                        </button>
-                    </div>
-                </nav>
-
-                <nav class="sidebar-nav">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                        <h4 data-i18n="sidebar_categories" style="margin-bottom: 0;">Categorías</h4>
-                        <button id="manage-categories-btn" class="mini-btn" data-i18n-title="manage_categories_title"
-                            title="Gestionar Categorías">⚙️</button>
-                    </div>
-                    <div id="sidebar-categories" class="category-list">
-                        <!-- Populated by JS -->
-                    </div>
+                    <a href="#" id="open-data-modal-btn" class="category-link">
+                        <span style="margin-right: 0.8rem; font-size: 1.1rem;">�</span>
+                        <span data-i18n="sidebar_data">Importar / Exportar</span>
+                    </a>
+                    <a href="#" id="open-budget-link" class="category-link">
+                        <span style="margin-right: 0.8rem; font-size: 1.1rem;">📊</span>
+                        <span data-i18n="budget_title">Presupuestos</span>
+                    </a>
+                    <a href="#" id="open-insights-link" class="category-link">
+                        <span style="margin-right: 0.8rem; font-size: 1.1rem;">💡</span>
+                        <span data-i18n="insights_title">Inteligencia de Patrones</span>
+                    </a>
+                    <a href="#" id="manage-categories-sidebar-btn" class="category-link">
+                        <span style="margin-right: 0.8rem; font-size: 1.1rem;">⚙️</span>
+                        <span data-i18n="manage_categories_title">Gestionar Categorías</span>
+                    </a>
                 </nav>
 
                 <div class="sidebar-footer">
+                    <div class="privacy-badge">
+                        <span class="lock-icon">🔒</span>
+                        <span data-i18n="privacy_label">100% Local & Privado</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content-area">
+            <header>
+                <div class="header-main">
                     <div class="lang-switch-container">
                         <span class="lang-label">ES</span>
                         <label class="switch">
@@ -96,56 +96,71 @@
                         </label>
                         <span class="lang-label">EN</span>
                     </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header>
-                <div class="header-main">
-                    <h1 data-i18n="header_overview">Resumen</h1>
                     <div class="date-display" id="current-date">--/--/----</div>
                 </div>
             </header>
 
             <!-- Summary Cards -->
             <section class="summary-cards">
-                <div class="card income">
+                <div class="card income" style="animation-delay: 0.1s;">
                     <h3 data-i18n="card_income">Ingresos Totales</h3>
                     <p class="amount positive" id="total-income">$0.00</p>
                 </div>
-                <div class="card expense">
+                <div class="card expense" style="animation-delay: 0.2s;">
                     <h3 data-i18n="card_expense">Gastos Totales</h3>
                     <p class="amount negative" id="total-expense">$0.00</p>
                 </div>
-                <div class="card balance">
+                <div class="card balance" style="animation-delay: 0.3s;">
                     <h3 data-i18n="card_balance">Balance Neto</h3>
                     <p class="amount" id="net-balance">$0.00</p>
+                </div>
+                <div class="card avg-expense" style="animation-delay: 0.4s;">
+                    <h3 data-i18n="card_avg_expense">Gasto Medio Mensual</h3>
+                    <p class="amount" id="avg-expense-display">$0.00</p>
                 </div>
             </section>
 
             <!-- Financial Health Panel -->
             <section class="health-metrics-grid">
-                <div class="health-card" id="card-savings-rate">
+                <div class="health-card" id="card-savings-rate" style="animation-delay: 0.5s;">
                     <div class="health-icon">📈</div>
                     <div class="health-info">
-                        <span data-i18n="metric_savings_rate">Tasa de Ahorro</span>
+                        <div class="health-label-row">
+                            <span data-i18n="metric_savings_rate">Tasa de Ahorro</span>
+                            <span class="info-icon" data-i18n-tooltip="metric_savings_rate_desc">i</span>
+                        </div>
                         <h4 id="health-savings-rate">0%</h4>
                     </div>
                 </div>
-                <div class="health-card" id="card-runway">
+                <div class="health-card" id="card-runway" style="animation-delay: 0.6s;">
                     <div class="health-icon">🛡️</div>
                     <div class="health-info">
-                        <span data-i18n="metric_runway">Reserva (Días)</span>
+                        <div class="health-label-row">
+                            <span data-i18n="metric_runway">Reserva (Días)</span>
+                            <span class="info-icon" data-i18n-tooltip="metric_runway_desc">i</span>
+                        </div>
                         <h4 id="health-runway">0</h4>
                     </div>
                 </div>
-                <div class="health-card" id="card-ants">
+                <div class="health-card" id="card-ants" style="animation-delay: 0.7s;">
                     <div class="health-icon">🐜</div>
                     <div class="health-info">
-                        <span data-i18n="metric_ant_expenses">Gastos Hormiga</span>
+                        <div class="health-label-row">
+                            <span data-i18n="metric_ant_expenses">Gastos Hormiga</span>
+                            <span class="info-icon" data-i18n-tooltip="metric_ant_expenses_desc">i</span>
+                            <span id="edit-ants-threshold" class="edit-icon-mini" title="Editar Umbral">⚙️</span>
+                        </div>
                         <h4 id="health-ant-expenses">$0,00</h4>
+                    </div>
+                </div>
+                <div class="health-card" id="card-projection" style="animation-delay: 0.8s;">
+                    <div class="health-icon">🔮</div>
+                    <div class="health-info">
+                        <div class="health-label-row">
+                            <span data-i18n="metric_projection">Proyección Fin de Mes</span>
+                            <span class="info-icon" data-i18n-tooltip="metric_projection_desc">i</span>
+                        </div>
+                        <h4 id="health-projection">$0,00</h4>
                     </div>
                 </div>
             </section>
@@ -178,7 +193,18 @@
                         </div>
                     </div>
                 </div>
+                <!-- Top 5 Expenses -->
+                <div id="top-expenses-container"
+                    style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1rem;"
+                        data-i18n="top_expenses_title">Mayores Gastos del Mes</h4>
+                    <div id="top-expenses-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
             </section>
+
+            <section id="budget-status-container" class="card" style="margin-bottom: 2rem; display: none;"></section>
 
             <!-- Charts Section -->
             <section class="charts-section">
@@ -285,13 +311,33 @@
     <!-- Budget Configuration Modal -->
     <div id="budget-modal" class="modal">
         <div class="modal-content large">
-            <h3 data-i18n="budget_title">Configurar Presupuestos</h3>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;"
-                data-i18n="budget_modal_help">
-                Define tus límites de gasto mensual por categoría.
-            </p>
+            <div
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+                <div>
+                    <h3 data-i18n="budget_title">Configurar Presupuestos</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);" data-i18n="budget_modal_help">
+                        Define tus límites de gasto mensual por categoría.
+                    </p>
+                </div>
+                <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                    <label style="font-size: 0.75rem; margin-bottom: 0.2rem;" data-i18n="budget_period">Periodo:</label>
+                    <select id="budget-month-select"
+                        style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.4rem; border-radius: 6px;">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+            </div>
             <div id="budget-config-list" class="budget-config-grid">
                 <!-- Populated by JS -->
+            </div>
+
+            <div class="ant-threshold-box">
+                <div>
+                    <h4 data-i18n="label_ant_threshold">Umbral Gasto Hormiga</h4>
+                    <p data-i18n="help_ant_threshold">Define el monto máximo para clasificar un gasto como 'hormiga'.
+                    </p>
+                </div>
+                <input type="number" id="budget-ant-threshold" placeholder="0">
             </div>
             <div class="modal-actions">
                 <button type="button" id="close-budget-modal-btn" class="upload-btn secondary"
@@ -318,6 +364,17 @@
                     title="Añadir Categoría">➕</button>
             </div>
 
+            <!-- Ant threshold setting -->
+            <!-- Ant threshold setting -->
+            <div class="ant-threshold-box">
+                <div>
+                    <h4 data-i18n="label_ant_threshold">Umbral Gasto Hormiga</h4>
+                    <p data-i18n="help_ant_threshold">Define el monto máximo para clasificar un gasto como 'hormiga'.
+                    </p>
+                </div>
+                <input type="number" id="ant-threshold-input" value="150">
+            </div>
+
             <div id="category-manager-list" class="category-manager-list">
                 <!-- Populated by JS -->
             </div>
@@ -329,7 +386,117 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Data Management Modal -->
+    <div id="data-modal" class="modal">
+        <div class="modal-content">
+            <h3 data-i18n="data_management_title">Gestión de Datos</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;"
+                data-i18n="data_management_help">
+                Importa, exporta o limpia tus datos financieros locales.
+            </p>
+
+            <div class="data-mgmt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <!-- Imports -->
+                <div
+                    style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+                    Importar (Añadir a los actuales)</div>
+
+                <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
+                <input type="file" id="csv-upload" accept=".csv" hidden>
+
+                <label for="brou-excel-upload" class="upload-btn" data-i18n="btn_import_brou">BROU Excel</label>
+                <input type="file" id="brou-excel-upload" accept=".xls,.xlsx" hidden>
+
+                <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore"
+                    style="grid-column: span 2;">Importar Backup (Sobrescribir)</label>
+                <input type="file" id="json-restore" accept=".json" hidden>
+
+                <!-- Exports -->
+                <div
+                    style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+                    Exportar</div>
+
+                <button id="backup-btn" class="upload-btn secondary" data-i18n="btn_backup">Backup JSON</button>
+                <button id="csv-export-btn" class="upload-btn secondary" data-i18n="btn_csv_export">Exportar
+                    CSV</button>
+
+                <!-- Danger Zone -->
+                <div
+                    style="grid-column: span 2; margin-top: 1.5rem; border-bottom: 1px solid rgba(248, 113, 113, 0.3); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--danger-color); text-transform: uppercase; letter-spacing: 0.05em;">
+                    Zona de Peligro</div>
+
+                <button id="clear-data-btn" class="delete-all-btn" style="grid-column: span 2; width: 100%;"
+                    data-i18n="btn_clear">
+                    🗑️ Borrar Todos los Datos
+                </button>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 2rem;">
+                <button type="button" id="close-data-modal-btn" class="upload-btn secondary"
+                    data-i18n="btn_close">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insights Modal -->
+    <div id="insights-modal" class="modal">
+        <div class="modal-content analytics-modal">
+            <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem;">
+                <h3 data-i18n="insights_title" style="font-size: 1.8rem; margin: 0;">Inteligencia de Patrones</h3>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.5rem;"
+                    data-i18n="insights_help">
+                    Análisis avanzado de tus hábitos financieros y gastos fijos registrados.
+                </p>
+            </div>
+
+            <div class="insights-scroll-area" style="flex: 1; overflow-y: auto; padding-right: 1.5rem;">
+                <div class="insights-grid">
+                    <!-- Left Column: Recurring Patterns -->
+                    <div class="insights-left">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h4 class="insights-section-title">
+                                <span>📅</span>
+                                <span data-i18n="recurring_title">Gastos Recurrentes Detectados</span>
+                            </h4>
+                            <span class="badge warning" style="padding: 0.4rem 0.8rem;"
+                                data-i18n="recurring_badge">Automático</span>
+                        </div>
+                        <div id="recurring-list" class="recurring-list-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Contextual Analysis -->
+                    <div class="insights-right">
+                        <h4 class="insights-section-title">
+                            <span>🔝</span>
+                            <span data-i18n="top_expenses_title">Mayores Impactos</span>
+                        </h4>
+                        <div id="insights-top-expenses-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <div
+                            style="margin-top: 2rem; padding: 1.5rem; background: rgba(56, 189, 248, 0.05); border-radius: 1rem; border: 1px solid rgba(56, 189, 248, 0.1);">
+                            <h5 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--accent-color);">Tip de Ahorro
+                            </h5>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+                                Analiza tus gastos recurrentes para identificar suscripciones que ya no utilizas. ¡Un
+                                pequeño ahorro mensual se nota al final del año!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 1.5rem; padding-top: 1.5rem;">
+                <button type="button" id="close-insights-modal-btn" class="upload-btn" style="min-width: 150px;"
+                    data-i18n="btn_close">Entendido</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
