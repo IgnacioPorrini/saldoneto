@@ -1642,6 +1642,70 @@ tr:hover {
 
     .mobile-header {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1.5rem;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(12px);
+        height: 60px;
+        position: sticky;
+        top: 0;
+        width: 100%;
+        z-index: 1001;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .mobile-brand {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--text-primary);
+        letter-spacing: -0.02em;
+    }
+
+    .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        z-index: 1002;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--text-primary);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger:hover span {
+        background: var(--accent-color);
+        box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
     }
 
     .sidebar {
