@@ -444,3 +444,66 @@ export const processBROUExcelData = (workbook, categoriesConfig) => {
 
     return transactions;
 };
+
+export const generateDemoData = () => {
+    const transactions = [];
+    const now = new Date();
+
+    const fixedExpenses = [
+        { desc: 'Alquiler Apto', amount: -25000, cat: 'Otros', day: 5 },
+        { desc: 'Sueldo Mensual', amount: 85000, cat: 'Ingresos', day: 1 },
+        { desc: 'UTE (Electricidad)', amount: -3200, cat: 'Servicios', day: 10 },
+        { desc: 'OSE (Agua)', amount: -850, cat: 'Servicios', day: 15 },
+        { desc: 'Antel (Internet)', amount: -1650, cat: 'Servicios', day: 20 },
+        { desc: 'Seguro Salud', amount: -4500, cat: 'Salud', day: 3 }
+    ];
+
+    const randomExpenses = [
+        { desc: 'Supermercado Tienda Inglesa', min: -1500, max: -4500, cat: 'Supermercado', freq: 4 },
+        { desc: 'Supermercado Devoto', min: -800, max: -2500, cat: 'Supermercado', freq: 2 },
+        { desc: 'Cena Restaurante', min: -1200, max: -3500, cat: 'Restaurantes', freq: 3 },
+        { desc: 'Café / Merienda', min: -250, max: -800, cat: 'Restaurantes', freq: 6 },
+        { desc: 'Combustible ANCAP', min: -2000, max: -3500, cat: 'Transporte', freq: 2 },
+        { desc: 'Uber / Taxi', min: -200, max: -900, cat: 'Transporte', freq: 5 },
+        { desc: 'Farmacia', min: -300, max: -1500, cat: 'Salud', freq: 1 },
+        { desc: 'Cine / Teatro', min: -800, max: -2200, cat: 'Otros', freq: 1 },
+        { desc: 'Compra Online', min: -500, max: -5000, cat: 'Otros', freq: 2 }
+    ];
+
+    for (let i = 0; i < 12; i++) {
+        const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+
+        // Fixed
+        fixedExpenses.forEach(fe => {
+            const day = String(fe.day).padStart(2, '0');
+            transactions.push({
+                id: `demo-${year}${month}${day}-${Math.random().toString(36).substr(2, 5)}`,
+                date: `${year}-${month}-${day}`,
+                description: fe.desc,
+                amount: fe.amount,
+                type: fe.amount < 0 ? 'expense' : 'income',
+                category: fe.cat
+            });
+        });
+
+        // Random
+        randomExpenses.forEach(re => {
+            for (let f = 0; f < re.freq; f++) {
+                const randDay = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
+                const amount = Math.floor(Math.random() * (re.max - re.min + 1)) + re.min;
+                transactions.push({
+                    id: `demo-${year}${month}${randDay}-${Math.random().toString(36).substr(2, 5)}`,
+                    date: `${year}-${month}-${randDay}`,
+                    description: re.desc,
+                    amount: amount,
+                    type: amount < 0 ? 'expense' : 'income',
+                    category: re.cat
+                });
+            }
+        });
+    }
+
+    return transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+};

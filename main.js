@@ -603,6 +603,21 @@ const init = () => {
             });
         }
 
+        const loadDemoBtn = document.getElementById('load-demo-btn');
+        if (loadDemoBtn) {
+            loadDemoBtn.addEventListener('click', () => {
+                if (confirm(i18n.getTrans('confirm_demo'))) {
+                    const demoTxs = data.generateDemoData();
+                    transactions = [...transactions, ...demoTxs];
+                    refreshData();
+                    ui.showToast(i18n.getTrans('msg_demo_loaded'), 'success');
+
+                    const modal = document.getElementById('data-modal');
+                    if (modal) modal.classList.remove('active');
+                }
+            });
+        }
+
         const openModalBtn = document.getElementById('open-modal-btn');
         if (openModalBtn) {
             openModalBtn.addEventListener('click', () => {

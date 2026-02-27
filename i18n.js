@@ -113,7 +113,10 @@ export const translations = {
         top_expenses_title: "Mayores Gastos",
         no_expenses: "Sin gastos para este periodo",
         insights_title: "Explorar Patrones",
-        insights_help: "Análisis automático de tus hábitos financieros y gastos fijos registrados."
+        insights_help: "Análisis automático de tus hábitos financieros y gastos fijos registrados.",
+        btn_load_demo: "Cargar Datos de Prueba",
+        confirm_demo: "¿Cargar datos de prueba? Esto añadirá transacciones ficticias de los últimos 12 meses.",
+        msg_demo_loaded: "Datos de prueba cargados"
     },
     en: {
         header_overview: "Overview",
@@ -226,7 +229,10 @@ export const translations = {
         top_expenses_title: "Top Expenses",
         no_expenses: "No expenses for this period",
         insights_title: "Explore Patterns",
-        insights_help: "Automated analysis of your financial habits and registered fixed expenses."
+        insights_help: "Automated analysis of your financial habits and registered fixed expenses.",
+        btn_load_demo: "Load Demo Data",
+        confirm_demo: "Load demo data? This will add dummy transactions from the last 12 months.",
+        msg_demo_loaded: "Demo data loaded"
     }
 };
 
