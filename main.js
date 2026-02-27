@@ -143,18 +143,15 @@ const filterData = () => {
     filtered.sort((a, b) => {
         let valA, valB;
         if (sortConfig.key === 'date') {
-            valA = a.date || '';
-            valB = b.date || '';
+            valA = new Date(a.date).getTime() || 0;
+            valB = new Date(b.date).getTime() || 0;
         } else {
             valA = parseFloat(a.amount) || 0;
             valB = parseFloat(b.amount) || 0;
         }
 
-        if (sortConfig.direction === 'asc') {
-            return valA > valB ? 1 : -1;
-        } else {
-            return valA < valB ? 1 : -1;
-        }
+        const diff = valA - valB;
+        return sortConfig.direction === 'asc' ? diff : -diff;
     });
 
     ui.renderTransactions({

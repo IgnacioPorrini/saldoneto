@@ -373,7 +373,7 @@ export const renderTransactions = (params) => {
 
     transactionsBody.innerHTML = '';
 
-    const sorted = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sorted = [...filtered];
     const totalItems = sorted.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
 
