@@ -258,7 +258,6 @@ export const processCSVData = (csvText, categoriesConfig) => {
     if (headerIndex === -1) headerIndex = 0;
 
     const rawHeaders = splitLine(lines[headerIndex], csvDelimiter).map(h => h.trim());
-    console.log('[CSV-IMPORT] Headers recognized:', rawHeaders);
 
     const colMap = {
         date: rawHeaders.findIndex(h => norm(h).includes('fecha') || norm(h).includes('fmov')),
@@ -268,7 +267,6 @@ export const processCSVData = (csvText, categoriesConfig) => {
         amount: rawHeaders.findIndex(h => (norm(h).includes('monto') || norm(h).includes('importe')) && !norm(h).includes('saldo'))
     };
 
-    console.log('[CSV-IMPORT] Column Mapping:', colMap);
 
     const parseAmount = (val) => {
         if (!val) return 0;
@@ -318,9 +316,6 @@ export const processCSVData = (csvText, categoriesConfig) => {
             amount = parseAmount(parts[colMap.amount]);
         }
 
-        if (idx < 5) {
-            console.log(`[CSV-CHECK Row ${idx}] Desc: ${description.substring(0, 20)} | Deb: ${debVal} | Cre: ${creVal} | Final: ${amount}`);
-        }
 
         let category = getCategory(description, categoriesConfig);
         if (amount > 0 && category === 'Otros') category = 'Ingresos';
@@ -341,7 +336,6 @@ export const processCSVData = (csvText, categoriesConfig) => {
         }
     });
 
-    console.log(`[CSV-IMPORT] Processed ${transactions.length} rows successfully.`);
     return transactions;
 };
 

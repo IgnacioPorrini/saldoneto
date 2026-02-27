@@ -466,7 +466,6 @@ const init = () => {
                         const buffer = new Uint8Array(event.target.result);
                         const workbook = XLSX.read(buffer, { type: 'array' });
                         const newTxs = data.processBROUExcelData(workbook, categoriesConfig);
-                        console.log('BROU Excel Import:', newTxs ? newTxs.length : 0, 'transactions found');
 
                         if (newTxs && newTxs.length > 0) {
                             transactions = [...transactions, ...newTxs];
@@ -495,9 +494,7 @@ const init = () => {
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const text = event.target.result;
-                    console.log('CSV Raw Text length:', text.length);
                     const newTxs = data.processCSVData(text, categoriesConfig);
-                    console.log('CSV Processed:', newTxs ? newTxs.length : 0, 'transactions found');
 
                     if (newTxs && newTxs.length > 0) {
                         transactions = [...transactions, ...newTxs];
@@ -606,9 +603,14 @@ const init = () => {
         const loadDemoBtn = document.getElementById('load-demo-btn');
         if (loadDemoBtn) {
             loadDemoBtn.addEventListener('click', () => {
-                if (confirm(i18n.getTrans('confirm_demo'))) {
+                // Use a standard prompt fallback if confirm is weird, or just proceed for testing
+                // For now, let's keep confirm but add log
+                if (window.confirm(i18n.getTrans('confirm_demo'))) {
                     const demoTxs = data.generateDemoData();
-                    transactions = [...transactions, ...demoTxs];
+
+                    // Use push to maintain reference if needed, although reassignment should work
+                    transactions.push(...demoTxs);
+
                     refreshData();
                     ui.showToast(i18n.getTrans('msg_demo_loaded'), 'success');
 
