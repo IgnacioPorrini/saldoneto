@@ -24,6 +24,7 @@ const ITEMS_PER_PAGE = 25;
 let ANT_THRESHOLD = storage.loadAntThreshold();
 let editingTxId = null;
 let searchTimeout = null;
+let sortConfig = { key: 'date', direction: 'desc' };
 
 const openBudgetModal = (e) => {
     if (e) e.preventDefault();
@@ -101,7 +102,8 @@ const getElements = () => ({
     searchInput: document.getElementById('search-input'),
     pageInfoEl: document.getElementById('page-info'),
     prevPageBtn: document.getElementById('prev-page'),
-    nextPageBtn: document.getElementById('next-page')
+    nextPageBtn: document.getElementById('next-page'),
+    typeFilter: document.getElementById('type-filter')
 });
 
 let elements = {};
@@ -114,6 +116,7 @@ const filterData = () => {
 
     const filterMonth = monthFilter.value;
     const filterCat = categoryFilter.value;
+    const filterType = document.getElementById('type-filter')?.value || 'all';
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
     let filtered = transactions || [];
@@ -124,12 +127,35 @@ const filterData = () => {
     if (filterCat !== 'all') {
         filtered = filtered.filter(t => t.category === filterCat);
     }
+    if (filterType === 'debit') {
+        filtered = filtered.filter(t => t.amount < 0);
+    } else if (filterType === 'credit') {
+        filtered = filtered.filter(t => t.amount > 0);
+    }
     if (query) {
         filtered = filtered.filter(t => t.description.toLowerCase().includes(query));
     }
     if (currentSmartFilter === 'ant-expenses') {
         filtered = filtered.filter(t => t.amount < 0 && Math.abs(t.amount) <= ANT_THRESHOLD);
     }
+
+    // Sort
+    filtered.sort((a, b) => {
+        let valA, valB;
+        if (sortConfig.key === 'date') {
+            valA = a.date || '';
+            valB = b.date || '';
+        } else {
+            valA = parseFloat(a.amount) || 0;
+            valB = parseFloat(b.amount) || 0;
+        }
+
+        if (sortConfig.direction === 'asc') {
+            return valA > valB ? 1 : -1;
+        } else {
+            return valA < valB ? 1 : -1;
+        }
+    });
 
     ui.renderTransactions({
         filtered,
@@ -435,6 +461,23 @@ const init = () => {
         }
         if (prevPageBtn) prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; filterData(); } });
         if (nextPageBtn) nextPageBtn.addEventListener('click', () => { currentPage++; filterData(); });
+
+        const typeFilter = document.getElementById('type-filter');
+        if (typeFilter) typeFilter.addEventListener('change', () => { currentPage = 1; filterData(); });
+
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.addEventListener('click', () => {
+                const sortKey = th.dataset.sort;
+                if (sortConfig.key === sortKey) {
+                    sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortConfig.key = sortKey;
+                    sortConfig.direction = 'desc';
+                }
+                ui.updateSortIcons(sortConfig);
+                filterData();
+            });
+        });
 
         const langToggle = document.getElementById('lang-toggle');
         if (langToggle) {

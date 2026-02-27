@@ -239,6 +239,11 @@
                         <select id="month-filter">
                             <option value="all" data-i18n="filter_all">Todos los Meses</option>
                         </select>
+                        <select id="type-filter">
+                            <option value="all" data-i18n="filter_all_types">Todos los Tipos</option>
+                            <option value="debit" data-i18n="filter_debits">Solo Débitos</option>
+                            <option value="credit" data-i18n="filter_credits">Solo Créditos</option>
+                        </select>
                         <select id="category-filter">
                             <option value="all" data-i18n="filter_all_cats">Todas las Categorías</option>
                         </select>
@@ -250,9 +255,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th data-i18n="col_date">Fecha</th>
+                                <th class="sortable" data-sort="date" style="cursor: pointer;">
+                                    <span data-i18n="col_date">Fecha</span> <span class="sort-icon">↓</span>
+                                </th>
                                 <th data-i18n="col_desc">Descripción</th>
-                                <th data-i18n="col_amount">Monto</th>
+                                <th class="sortable" data-sort="amount" style="cursor: pointer;">
+                                    <span data-i18n="col_amount">Monto</span> <span class="sort-icon"></span>
+                                </th>
                                 <th data-i18n="col_type">Tipo</th>
                                 <th data-i18n="col_action" class="col-action">Acción</th>
                             </tr>

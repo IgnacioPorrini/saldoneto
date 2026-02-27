@@ -116,7 +116,10 @@ export const translations = {
         insights_help: "Análisis automático de tus hábitos financieros y gastos fijos registrados.",
         btn_load_demo: "Cargar Datos de Prueba",
         confirm_demo: "¿Cargar datos de prueba? Esto añadirá transacciones ficticias de los últimos 12 meses.",
-        msg_demo_loaded: "Datos de prueba cargados"
+        msg_demo_loaded: "Datos de prueba cargados",
+        filter_all_types: "Todos los Tipos",
+        filter_debits: "Solo Débitos (Gastos)",
+        filter_credits: "Solo Créditos (Ingresos)"
     },
     en: {
         header_overview: "Overview",
@@ -232,6 +235,9 @@ export const translations = {
         insights_help: "Automated analysis of your financial habits and registered fixed expenses.",
         btn_load_demo: "Load Demo Data",
         confirm_demo: "Load demo data? This will add dummy transactions from the last 12 months.",
+        filter_all_types: "All Types",
+        filter_debits: "Debits Only",
+        filter_credits: "Credits Only",
         msg_demo_loaded: "Demo data loaded"
     }
 };

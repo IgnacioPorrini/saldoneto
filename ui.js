@@ -426,6 +426,21 @@ export const renderTransactions = (params) => {
     });
 };
 
+export const updateSortIcons = (sortConfig) => {
+    document.querySelectorAll('th.sortable').forEach(th => {
+        const icon = th.querySelector('.sort-icon');
+        if (!icon) return;
+
+        if (th.dataset.sort === sortConfig.key) {
+            icon.textContent = sortConfig.direction === 'asc' ? '↑' : '↓';
+            th.classList.add('active-sort');
+        } else {
+            icon.textContent = '';
+            th.classList.remove('active-sort');
+        }
+    });
+};
+
 export const triggerContentAnimation = () => {
     const main = document.getElementById('main-content-area');
     if (!main) return;
