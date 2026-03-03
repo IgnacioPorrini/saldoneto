@@ -852,6 +852,28 @@ const init = () => {
             });
         }
 
+        // Global Modal Logic: Close on Outside Click & ESC Key
+        const closeActiveModal = () => {
+            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+        };
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeActiveModal();
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeActiveModal();
+            }
+        });
+
+        // "X" Icons closing logic
+        document.querySelectorAll('.modal-close-icon').forEach(btn => {
+            btn.addEventListener('click', closeActiveModal);
+        });
+
         // Mobile Menu Toggle Logic
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const sidebar = document.querySelector('.sidebar');

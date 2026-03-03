@@ -288,38 +288,42 @@
     <!-- Transaction Modal -->
     <div id="transaction-modal" class="modal">
         <div class="modal-content">
+            <button class="modal-close-icon" aria-label="Close modal">×</button>
             <h3 id="modal-title" data-i18n="sidebar_add">Nueva Transacción</h3>
-            <form id="transaction-form">
-                <div class="form-group">
-                    <label data-i18n="form_date">Fecha</label>
-                    <input type="date" id="tx-date" required>
-                </div>
-                <div class="form-group">
-                    <label data-i18n="form_desc">Descripción</label>
-                    <input type="text" id="tx-desc" placeholder="Ej: Café en Starbucks" required>
-                </div>
-                <div class="form-group">
-                    <label data-i18n="form_amount">Monto</label>
-                    <input type="number" id="tx-amount" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label data-i18n="form_cat">Categoría</label>
-                    <select id="tx-cat" required>
-                        <!-- Populated by JS -->
-                    </select>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" id="close-modal-btn" class="upload-btn secondary"
-                        data-i18n="btn_cancel">Cancelar</button>
-                    <button type="submit" class="upload-btn" data-i18n="btn_save">Guardar</button>
-                </div>
-            </form>
+            <div class="modal-body">
+                <form id="transaction-form">
+                    <div class="form-group">
+                        <label data-i18n="form_date">Fecha</label>
+                        <input type="date" id="tx-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="form_desc">Descripción</label>
+                        <input type="text" id="tx-desc" placeholder="Ej: Café en Starbucks" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="form_amount">Monto</label>
+                        <input type="number" id="tx-amount" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="form_cat">Categoría</label>
+                        <select id="tx-cat" required>
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="close-modal-btn" class="upload-btn secondary"
+                    data-i18n="btn_cancel">Cancelar</button>
+                <button type="submit" form="transaction-form" class="upload-btn" data-i18n="btn_save">Guardar</button>
+            </div>
         </div>
     </div>
 
     <!-- Budget Configuration Modal -->
     <div id="budget-modal" class="modal">
         <div class="modal-content large">
+            <button class="modal-close-icon" aria-label="Close modal">×</button>
             <div
                 style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
                 <div>
@@ -336,18 +340,23 @@
                     </select>
                 </div>
             </div>
-            <div id="budget-config-list" class="budget-config-grid">
-                <!-- Populated by JS -->
+
+            <div class="modal-body">
+                <div id="budget-config-list" class="budget-config-grid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="ant-threshold-box">
+                    <div>
+                        <h4 data-i18n="label_ant_threshold">Umbral Gasto Hormiga</h4>
+                        <p data-i18n="help_ant_threshold">Define el monto máximo para clasificar un gasto como
+                            'hormiga'.
+                        </p>
+                    </div>
+                    <input type="number" id="budget-ant-threshold" placeholder="0">
+                </div>
             </div>
 
-            <div class="ant-threshold-box">
-                <div>
-                    <h4 data-i18n="label_ant_threshold">Umbral Gasto Hormiga</h4>
-                    <p data-i18n="help_ant_threshold">Define el monto máximo para clasificar un gasto como 'hormiga'.
-                    </p>
-                </div>
-                <input type="number" id="budget-ant-threshold" placeholder="0">
-            </div>
             <div class="modal-actions">
                 <button type="button" id="close-budget-modal-btn" class="upload-btn secondary"
                     data-i18n="btn_cancel">Cerrar</button>
@@ -360,32 +369,35 @@
     <!-- Category Management Modal -->
     <div id="category-modal" class="modal">
         <div class="modal-content large">
+            <button class="modal-close-icon" aria-label="Close modal">×</button>
             <h3 data-i18n="manage_categories_title">Gestionar Categorías</h3>
             <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;"
                 data-i18n="category_modal_help">
                 Añade o edita categorías y sus palabras clave para auto-categorización.
             </p>
 
-            <div class="category-manager-header">
-                <input type="text" id="new-category-name" placeholder="Nueva Categoría"
-                    data-i18n-placeholder="placeholder_new_cat">
-                <button id="add-category-btn" class="upload-btn" data-i18n-title="msg_category_added"
-                    title="Añadir Categoría">➕</button>
-            </div>
-
-            <!-- Ant threshold setting -->
-            <!-- Ant threshold setting -->
-            <div class="ant-threshold-box">
-                <div>
-                    <h4 data-i18n="label_ant_threshold">Umbral Gasto Hormiga</h4>
-                    <p data-i18n="help_ant_threshold">Define el monto máximo para clasificar un gasto como 'hormiga'.
-                    </p>
+            <div class="modal-body">
+                <div class="category-manager-header">
+                    <input type="text" id="new-category-name" placeholder="Nueva Categoría"
+                        data-i18n-placeholder="placeholder_new_cat">
+                    <button id="add-category-btn" class="upload-btn" data-i18n-title="msg_category_added"
+                        title="Añadir Categoría">➕</button>
                 </div>
-                <input type="number" id="ant-threshold-input" value="150">
-            </div>
 
-            <div id="category-manager-list" class="category-manager-list">
-                <!-- Populated by JS -->
+                <!-- Ant threshold setting -->
+                <div class="ant-threshold-box">
+                    <div>
+                        <h4 data-i18n="label_ant_threshold">Umbral Gasto Hormiga</h4>
+                        <p data-i18n="help_ant_threshold">Define el monto máximo para clasificar un gasto como
+                            'hormiga'.
+                        </p>
+                    </div>
+                    <input type="number" id="ant-threshold-input" value="150">
+                </div>
+
+                <div id="category-manager-list" class="category-manager-list">
+                    <!-- Populated by JS -->
+                </div>
             </div>
 
             <div class="modal-actions">
@@ -398,52 +410,55 @@
     <!-- Data Management Modal -->
     <div id="data-modal" class="modal">
         <div class="modal-content">
+            <button class="modal-close-icon" aria-label="Close modal">×</button>
             <h3 data-i18n="data_management_title">Gestión de Datos</h3>
             <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;"
                 data-i18n="data_management_help">
                 Importa, exporta o limpia tus datos financieros locales.
             </p>
 
-            <div class="data-mgmt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <!-- Imports -->
-                <div
-                    style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
-                    Importar (Añadir a los actuales)</div>
+            <div class="modal-body">
+                <div class="data-mgmt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <!-- Imports -->
+                    <div
+                        style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Importar (Añadir a los actuales)</div>
 
-                <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
-                <input type="file" id="csv-upload" accept=".csv" hidden>
+                    <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
+                    <input type="file" id="csv-upload" accept=".csv" hidden>
 
-                <label for="brou-excel-upload" class="upload-btn" data-i18n="btn_import_brou">BROU Excel</label>
-                <input type="file" id="brou-excel-upload" accept=".xls,.xlsx" hidden>
+                    <label for="brou-excel-upload" class="upload-btn" data-i18n="btn_import_brou">BROU Excel</label>
+                    <input type="file" id="brou-excel-upload" accept=".xls,.xlsx" hidden>
 
-                <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore"
-                    style="grid-column: span 2;">Importar Backup (Sobrescribir)</label>
-                <input type="file" id="json-restore" accept=".json" hidden>
+                    <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore"
+                        style="grid-column: span 2;">Importar Backup (Sobrescribir)</label>
+                    <input type="file" id="json-restore" accept=".json" hidden>
 
-                <!-- Demo Data -->
-                <div
-                    style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.05em;">
-                    Datos de Demostración</div>
-                <button id="load-demo-btn" class="upload-btn btn-demo" data-i18n="btn_load_demo">Cargar Datos de
-                    Prueba</button>
+                    <!-- Demo Data -->
+                    <div
+                        style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Datos de Demostración</div>
+                    <button id="load-demo-btn" class="upload-btn btn-demo" data-i18n="btn_load_demo">Cargar Datos de
+                        Prueba</button>
 
-                <!-- Exports -->
-                <div
-                    style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
-                    Exportar</div>
+                    <!-- Exports -->
+                    <div
+                        style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Exportar</div>
 
-                <button id="backup-btn" class="upload-btn secondary" style="grid-column: span 2;"
-                    data-i18n="btn_backup">Exportar Backup JSON</button>
+                    <button id="backup-btn" class="upload-btn secondary" style="grid-column: span 2;"
+                        data-i18n="btn_backup">Exportar Backup JSON</button>
 
-                <!-- Danger Zone -->
-                <div
-                    style="grid-column: span 2; margin-top: 1.5rem; border-bottom: 1px solid rgba(248, 113, 113, 0.3); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--danger-color); text-transform: uppercase; letter-spacing: 0.05em;">
-                    Zona de Peligro</div>
+                    <!-- Danger Zone -->
+                    <div
+                        style="grid-column: span 2; margin-top: 1.5rem; border-bottom: 1px solid rgba(248, 113, 113, 0.3); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--danger-color); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Zona de Peligro</div>
 
-                <button id="clear-data-btn" class="delete-all-btn" style="grid-column: span 2; width: 100%;"
-                    data-i18n="btn_clear">
-                    🗑️ Borrar Todos los Datos
-                </button>
+                    <button id="clear-data-btn" class="delete-all-btn" style="grid-column: span 2; width: 100%;"
+                        data-i18n="btn_clear">
+                        🗑️ Borrar Todos los Datos
+                    </button>
+                </div>
             </div>
 
             <div class="modal-actions" style="margin-top: 2rem;">
@@ -456,6 +471,7 @@
     <!-- Insights Modal -->
     <div id="insights-modal" class="modal">
         <div class="modal-content analytics-modal">
+            <button class="modal-close-icon" aria-label="Close modal">×</button>
             <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem;">
                 <h3 data-i18n="insights_title" style="font-size: 1.8rem; margin: 0;">Inteligencia de Patrones</h3>
                 <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.5rem;"
@@ -464,50 +480,55 @@
                 </p>
             </div>
 
-            <div class="insights-scroll-area" style="flex: 1; overflow-y: auto; padding-right: 1.5rem;">
-                <div class="insights-grid">
-                    <!-- Left Column: Recurring Patterns -->
-                    <div class="insights-left">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div class="modal-body">
+                <div class="insights-scroll-area">
+                    <div class="insights-grid">
+                        <!-- Left Column: Recurring Patterns -->
+                        <div class="insights-left">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                                <h4 class="insights-section-title">
+                                    <span>📅</span>
+                                    <span data-i18n="recurring_title">Gastos Recurrentes Detectados</span>
+                                </h4>
+                                <span class="badge warning" style="padding: 0.4rem 0.8rem;"
+                                    data-i18n="recurring_badge">Automático</span>
+                            </div>
+                            <div id="recurring-list" class="recurring-list-grid">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Contextual Analysis -->
+                        <div class="insights-right">
                             <h4 class="insights-section-title">
-                                <span>📅</span>
-                                <span data-i18n="recurring_title">Gastos Recurrentes Detectados</span>
+                                <span>🔝</span>
+                                <span data-i18n="top_expenses_title">Mayores Impactos</span>
                             </h4>
-                            <span class="badge warning" style="padding: 0.4rem 0.8rem;"
-                                data-i18n="recurring_badge">Automático</span>
-                        </div>
-                        <div id="recurring-list" class="recurring-list-grid">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
+                            <div id="insights-top-expenses-list"
+                                style="display: flex; flex-direction: column; gap: 1rem;">
+                                <!-- Populated by JS -->
+                            </div>
 
-                    <!-- Right Column: Contextual Analysis -->
-                    <div class="insights-right">
-                        <h4 class="insights-section-title">
-                            <span>🔝</span>
-                            <span data-i18n="top_expenses_title">Mayores Impactos</span>
-                        </h4>
-                        <div id="insights-top-expenses-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                            <!-- Populated by JS -->
-                        </div>
-
-                        <div
-                            style="margin-top: 2rem; padding: 1.5rem; background: rgba(56, 189, 248, 0.05); border-radius: 1rem; border: 1px solid rgba(56, 189, 248, 0.1);">
-                            <h5 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--accent-color);">Tip de Ahorro
-                            </h5>
-                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
-                                Analiza tus gastos recurrentes para identificar suscripciones que ya no utilizas. ¡Un
-                                pequeño ahorro mensual se nota al final del año!
-                            </p>
+                            <div
+                                style="margin-top: 2rem; padding: 1.5rem; background: rgba(56, 189, 248, 0.05); border-radius: 1rem; border: 1px solid rgba(56, 189, 248, 0.1);">
+                                <h5 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--accent-color);">Tip de
+                                    Ahorro
+                                </h5>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+                                    Analiza tus gastos recurrentes para identificar suscripciones que ya no utilizas.
+                                    ¡Un
+                                    pequeño ahorro mensual se nota al final del año!
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal-actions" style="margin-top: 1.5rem; padding-top: 1.5rem;">
-                <button type="button" id="close-insights-modal-btn" class="upload-btn" style="min-width: 150px;"
-                    data-i18n="btn_close">Entendido</button>
+            <div class="modal-actions" style="margin-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <button type="button" id="close-insights-modal-btn" class="upload-btn"
+                    data-i18n="btn_close">Cerrar</button>
             </div>
         </div>
     </div>
