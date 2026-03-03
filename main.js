@@ -1,4 +1,4 @@
-// main.js - Entry point for CuentasClaras
+// main.js - Entry point for Saldo Neto
 // Author: Ignacio Porrini
 import * as i18n from './i18n.js';
 import * as storage from './storage.js';
@@ -612,7 +612,7 @@ const init = () => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `CuentasClaras_FullBackup_${new Date().toISOString().split('T')[0]}.json`;
+                a.download = `SaldoNeto_FullBackup_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
                 ui.showToast(i18n.getTrans('msg_backup_done'), 'success');
             });

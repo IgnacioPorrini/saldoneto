@@ -1,6 +1,6 @@
-# 🏦 CuentasClaras - Finanzas Personales con Privacidad Total
+# 🏦 Saldo Neto - Finanzas Personales con Privacidad Total
 
-**CuentasClaras** es una herramienta de gestión financiera diseñada para usuarios que valoran su privacidad por encima de todo. A diferencia de otras aplicaciones, **CuentasClaras no tiene nube ni servidores**: todo el procesamiento, almacenamiento y análisis ocurre exclusivamente en tu navegador. Tus datos bancarios nunca salen de tu dispositivo.
+**Saldo Neto** es una herramienta de gestión financiera diseñada para usuarios que valoran su privacidad por encima de todo. A diferencia de otras aplicaciones, **Saldo Neto** no tiene nube ni servidores: todo el procesamiento, almacenamiento y análisis ocurre exclusivamente en tu navegador. Tus datos bancarios nunca salen de tu dispositivo.
 
 ## ✨ Filosofía y Diferenciadores
 
