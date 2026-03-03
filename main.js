@@ -100,6 +100,8 @@ const getElements = () => ({
     monthFilter: document.getElementById('month-filter'),
     categoryFilter: document.getElementById('category-filter'),
     searchInput: document.getElementById('search-input'),
+    minAmountFilter: document.getElementById('min-amount-filter'),
+    maxAmountFilter: document.getElementById('max-amount-filter'),
     pageInfoEl: document.getElementById('page-info'),
     prevPageBtn: document.getElementById('prev-page'),
     nextPageBtn: document.getElementById('next-page'),
@@ -110,7 +112,7 @@ let elements = {};
 
 const filterData = () => {
     elements = getElements();
-    const { monthFilter, categoryFilter, searchInput, pageInfoEl, prevPageBtn, nextPageBtn } = elements;
+    const { monthFilter, categoryFilter, searchInput, minAmountFilter, maxAmountFilter, pageInfoEl, prevPageBtn, nextPageBtn } = elements;
 
     if (!monthFilter || !categoryFilter) return;
 
@@ -118,6 +120,8 @@ const filterData = () => {
     const filterCat = categoryFilter.value;
     const filterType = document.getElementById('type-filter')?.value || 'all';
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const minAmount = minAmountFilter ? parseFloat(minAmountFilter.value) : NaN;
+    const maxAmount = maxAmountFilter ? parseFloat(maxAmountFilter.value) : NaN;
 
     let filtered = transactions || [];
 
@@ -135,6 +139,15 @@ const filterData = () => {
     if (query) {
         filtered = filtered.filter(t => t.description.toLowerCase().includes(query));
     }
+
+    // Absolute Value Filters
+    if (!isNaN(minAmount)) {
+        filtered = filtered.filter(t => Math.abs(t.amount) >= minAmount);
+    }
+    if (!isNaN(maxAmount)) {
+        filtered = filtered.filter(t => Math.abs(t.amount) <= maxAmount);
+    }
+
     if (currentSmartFilter === 'ant-expenses') {
         filtered = filtered.filter(t => t.amount < 0 && Math.abs(t.amount) <= ANT_THRESHOLD);
     }
@@ -192,6 +205,22 @@ const filterData = () => {
         );
     }
     ui.triggerContentAnimation();
+
+    // Reset badge visibility logic
+    const resetBadge = document.getElementById('btn-reset-filters');
+    const badgeLabel = document.getElementById('filter-status-label');
+    if (resetBadge && badgeLabel) {
+        const anyFilter = filterMonth !== 'all' ||
+            filterCat !== 'all' ||
+            filterType !== 'all' ||
+            query !== '' ||
+            !isNaN(minAmount) ||
+            !isNaN(maxAmount) ||
+            currentSmartFilter !== null;
+
+        resetBadge.style.display = anyFilter ? 'flex' : 'none';
+        badgeLabel.textContent = i18n.getTrans('filter_clear_all');
+    }
 };
 
 const renderDashboard = (financeData) => {
@@ -418,7 +447,7 @@ const renderCategoryManager = () => {
 const init = () => {
     try {
         elements = getElements();
-        const { monthFilter, categoryFilter, searchInput, prevPageBtn, nextPageBtn } = elements;
+        const { monthFilter, categoryFilter, searchInput, minAmountFilter, maxAmountFilter, prevPageBtn, nextPageBtn } = elements;
 
         ui.applyTranslations(i18n.getTrans);
 
@@ -461,6 +490,9 @@ const init = () => {
 
         const typeFilter = document.getElementById('type-filter');
         if (typeFilter) typeFilter.addEventListener('change', () => { currentPage = 1; filterData(); });
+
+        if (minAmountFilter) minAmountFilter.addEventListener('input', () => { currentPage = 1; filterData(); });
+        if (maxAmountFilter) maxAmountFilter.addEventListener('input', () => { currentPage = 1; filterData(); });
 
         document.querySelectorAll('th.sortable').forEach(th => {
             th.addEventListener('click', () => {
@@ -716,6 +748,8 @@ const init = () => {
                 if (monthFilter) monthFilter.value = 'all';
                 if (categoryFilter) categoryFilter.value = 'all';
                 if (searchInput) searchInput.value = '';
+                if (minAmountFilter) minAmountFilter.value = '';
+                if (maxAmountFilter) maxAmountFilter.value = '';
                 currentSmartFilter = null;
                 currentPage = 1;
                 renderDashboard(currentFinanceData);

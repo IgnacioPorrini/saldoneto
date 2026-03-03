@@ -983,6 +983,15 @@ header h1 {
     flex-wrap: wrap;
 }
 
+.amount-range-filters {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.amount-range-filters input {
+    width: 90px !important;
+}
+
 .filters-container select,
 .filters-container input {
     background: rgba(15, 23, 42, 0.6);
