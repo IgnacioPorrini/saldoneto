@@ -59,6 +59,14 @@ export const renderMonthlyChart = (ctx, monthlyData, getTrans, filterDataCallbac
             },
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    bottom: 20,
+                    left: 5,
+                    right: 5,
+                    top: 5
+                }
+            },
             plugins: {
                 legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 12 } } }
             },
@@ -99,6 +107,14 @@ export const renderNetWorthChart = (ctx, monthlyData, getTrans) => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    bottom: 20,
+                    left: 5,
+                    right: 5,
+                    top: 5
+                }
+            },
             plugins: {
                 legend: { display: false }
             },
