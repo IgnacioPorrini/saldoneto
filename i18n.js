@@ -119,7 +119,9 @@ export const translations = {
         msg_demo_loaded: "Datos de prueba cargados",
         filter_all_types: "Todos los Tipos",
         filter_debits: "Solo Débitos (Gastos)",
-        filter_credits: "Solo Créditos (Ingresos)"
+        filter_credits: "Solo Créditos (Ingresos)",
+        placeholder_min: "$ Mín",
+        placeholder_max: "$ Máx"
     },
     en: {
         header_overview: "Overview",
@@ -238,7 +240,9 @@ export const translations = {
         filter_all_types: "All Types",
         filter_debits: "Debits Only",
         filter_credits: "Credits Only",
-        msg_demo_loaded: "Demo data loaded"
+        msg_demo_loaded: "Demo data loaded",
+        placeholder_min: "$ Min",
+        placeholder_max: "$ Max"
     }
 };
 
