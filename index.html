@@ -414,59 +414,68 @@
 
     <!-- Data Management Modal -->
     <div id="data-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content extra-large">
             <button class="modal-close-icon" aria-label="Close modal">×</button>
             <h3 data-i18n="data_management_title">Gestión de Datos</h3>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;"
-                data-i18n="data_management_help">
-                Importa, exporta o limpia tus datos financieros locales.
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;"
+                data-i18n="data_help_privacy">
+                Importa, exporta o limpia tus datos financieros locales con total privacidad.
             </p>
 
             <div class="modal-body">
-                <div class="data-mgmt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <!-- Imports -->
-                    <div
-                        style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
-                        Importar (Añadir a los actuales)</div>
+                <div class="data-mgmt-grid-v2">
+                    <!-- Column 1: Imports -->
+                    <div class="data-mgmt-column">
+                        <h4 data-i18n="data_section_import">
+                            <span>📥</span> Importar Datos
+                        </h4>
+                        <div class="column-content">
+                            <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
+                            <input type="file" id="csv-upload" accept=".csv" hidden>
 
-                    <label for="csv-upload" class="upload-btn" data-i18n="btn_import">Importar CSV</label>
-                    <input type="file" id="csv-upload" accept=".csv" hidden>
+                            <label for="brou-excel-upload" class="upload-btn" data-i18n="btn_import_brou">BROU Excel</label>
+                            <input type="file" id="brou-excel-upload" accept=".xls,.xlsx" hidden>
 
-                    <label for="brou-excel-upload" class="upload-btn" data-i18n="btn_import_brou">BROU Excel</label>
-                    <input type="file" id="brou-excel-upload" accept=".xls,.xlsx" hidden>
+                            <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore">
+                                Importar Backup JSON
+                            </label>
+                            <input type="file" id="json-restore" accept=".json" hidden>
+                        </div>
+                    </div>
 
-                    <label for="json-restore" class="upload-btn secondary" data-i18n="btn_restore"
-                        style="grid-column: span 2;">Importar Backup (Sobrescribir)</label>
-                    <input type="file" id="json-restore" accept=".json" hidden>
+                    <!-- Column 2: Export & Demo -->
+                    <div class="data-mgmt-column">
+                        <h4 data-i18n="data_section_export">
+                            <span>📤</span> Exportación y Demo
+                        </h4>
+                        <div class="column-content">
+                            <button id="backup-btn" class="upload-btn" data-i18n="btn_backup">Exportar Backup JSON</button>
+                            
+                            <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.75rem;" data-i18n="data_demo_help">¿Sin datos aún? Prueba con:</p>
+                                <button id="load-demo-btn" class="upload-btn btn-demo" style="width: 100%; margin: 0;" data-i18n="btn_load_demo">Cargar Datos de Prueba</button>
+                            </div>
+                        </div>
+                    </div>
 
-                    <!-- Demo Data -->
-                    <div
-                        style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.05em;">
-                        Datos de Demostración</div>
-                    <button id="load-demo-btn" class="upload-btn btn-demo" data-i18n="btn_load_demo">Cargar Datos de
-                        Prueba</button>
-
-                    <!-- Exports -->
-                    <div
-                        style="grid-column: span 2; margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
-                        Exportar</div>
-
-                    <button id="backup-btn" class="upload-btn secondary" style="grid-column: span 2;"
-                        data-i18n="btn_backup">Exportar Backup JSON</button>
-
-                    <!-- Danger Zone -->
-                    <div
-                        style="grid-column: span 2; margin-top: 1.5rem; border-bottom: 1px solid rgba(248, 113, 113, 0.3); padding-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--danger-color); text-transform: uppercase; letter-spacing: 0.05em;">
-                        Zona de Peligro</div>
-
-                    <button id="clear-data-btn" class="delete-all-btn" style="grid-column: span 2; width: 100%;"
-                        data-i18n="btn_clear">
-                        🗑️ Borrar Todos los Datos
-                    </button>
+                    <!-- Column 3: Danger Zone -->
+                    <div class="data-mgmt-column danger">
+                        <h4 data-i18n="data_section_danger">
+                            <span>⚠️</span> Zona de Peligro
+                        </h4>
+                        <div class="column-content">
+                            <button id="clear-data-btn" class="delete-all-btn" style="width: 100%;" data-i18n="btn_clear">
+                                🗑️ Borrar Todo
+                            </button>
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center; margin-top: 0.5rem; line-height: 1.4;" data-i18n="data_danger_desc">
+                                Esta acción eliminará permanentemente todos tus datos locales. Asegúrate de tener un backup.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="modal-actions" style="margin-top: 2rem;">
+            <div class="modal-actions">
                 <button type="button" id="close-data-modal-btn" class="upload-btn secondary"
                     data-i18n="btn_close">Cerrar</button>
             </div>

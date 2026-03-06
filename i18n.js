@@ -121,7 +121,13 @@ export const translations = {
         filter_debits: "Solo Débitos (Gastos)",
         filter_credits: "Solo Créditos (Ingresos)",
         placeholder_min: "$ Mín",
-        placeholder_max: "$ Máx"
+        placeholder_max: "$ Máx",
+        data_section_import: "Importar Datos",
+        data_section_export: "Exportación y Demo",
+        data_section_danger: "Zona de Peligro",
+        data_help_privacy: "Importa, exporta o limpia tus datos financieros locales con total privacidad.",
+        data_danger_desc: "Esta acción eliminará permanentemente todos tus datos locales. Asegúrate de tener un backup.",
+        data_demo_help: "¿Sin datos aún? Prueba con:"
     },
     en: {
         header_overview: "Overview",
@@ -242,7 +248,13 @@ export const translations = {
         filter_credits: "Credits Only",
         msg_demo_loaded: "Demo data loaded",
         placeholder_min: "$ Min",
-        placeholder_max: "$ Max"
+        placeholder_max: "$ Max",
+        data_section_import: "Import Data",
+        data_section_export: "Export & Demo",
+        data_section_danger: "Danger Zone",
+        data_help_privacy: "Import, export, or clear your local financial data with full privacy.",
+        data_danger_desc: "This action will permanently delete all your local data. Make sure you have a backup.",
+        data_demo_help: "No data yet? Try with:"
     }
 };
 

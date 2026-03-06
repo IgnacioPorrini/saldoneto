@@ -243,8 +243,61 @@ body {
 }
 
 /* Data Management Grid */
-.data-mgmt-grid {
+.data-mgmt-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
     animation: fadeInScale 0.4s ease-out;
+}
+
+.data-mgmt-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.data-mgmt-column:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(56, 189, 248, 0.2);
+}
+
+.data-mgmt-column h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.data-mgmt-column .column-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.data-mgmt-column.danger {
+    border-color: rgba(248, 113, 113, 0.15);
+}
+
+.data-mgmt-column.danger h4 {
+    color: var(--danger-color);
+}
+
+.modal-content.extra-large {
+    max-width: 1000px;
+    width: 95%;
 }
 
 /* Sidebar Navigation Links */
