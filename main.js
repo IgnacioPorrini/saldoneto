@@ -654,7 +654,7 @@ const init = () => {
                         }
 
                         if (newTxs.length > 0) {
-                            transactions = newTxs;
+                            transactions = [...transactions, ...newTxs];
                             refreshData();
                             ui.showToast(i18n.getTrans('msg_added'), 'success');
                             // Close modal

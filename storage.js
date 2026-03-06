@@ -32,8 +32,13 @@ export const saveBudgets = (budgets) => {
 };
 
 export const loadBudgets = () => {
-    const data = localStorage.getItem(BUDGET_KEY);
-    return data ? JSON.parse(data) : {};
+    try {
+        const data = localStorage.getItem(BUDGET_KEY);
+        return data ? JSON.parse(data) : {};
+    } catch (e) {
+        console.error('Error loading budgets', e);
+        return {};
+    }
 };
 
 export const saveCategoriesConfig = (config) => {
@@ -41,8 +46,13 @@ export const saveCategoriesConfig = (config) => {
 };
 
 export const loadCategoriesConfig = (defaults) => {
-    const data = localStorage.getItem(CAT_CONFIG_KEY);
-    return data ? JSON.parse(data) : { ...defaults };
+    try {
+        const data = localStorage.getItem(CAT_CONFIG_KEY);
+        return data ? JSON.parse(data) : { ...defaults };
+    } catch (e) {
+        console.error('Error loading categories config', e);
+        return { ...defaults };
+    }
 };
 
 export const saveAntThreshold = (val) => {

@@ -79,7 +79,7 @@ export const detectRecurringExpenses = (transactions) => {
                 avgAmount: Math.abs(avgAmount),
                 avgDay,
                 frequency: months.length,
-                lastDate: txs.sort((a, b) => new Date(b.date) - new Date(a.date))[0].date,
+                lastDate: [...txs].sort((a, b) => new Date(b.date) - new Date(a.date))[0].date,
                 category: txs[0].category
             });
         }
@@ -392,8 +392,9 @@ export const processBROUExcelData = (workbook, categoriesConfig) => {
         } else if (dateRaw instanceof Date) {
             dateStr = dateRaw.toISOString().split('T')[0];
         } else if (typeof dateRaw === 'number') {
-            const date = new Date(Math.round((dateRaw - 25569) * 864e5));
-            if (!isNaN(date.getTime())) dateStr = date.toISOString().split('T')[0];
+            const totalDays = Math.round(dateRaw - 25569);
+            const utcDate = new Date(totalDays * 864e5);
+            dateStr = utcDate.toISOString().split('T')[0];
         }
 
         if (!dateStr || isNaN(new Date(dateStr).getTime())) return;
@@ -421,7 +422,7 @@ export const processBROUExcelData = (workbook, categoriesConfig) => {
         if (amount > 0 && category === 'Otros') category = 'Ingresos';
 
         const tx = {
-            id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+            jsid: `tx-${Date.now()}-${transactions.length}-${Math.random().toString(36).substr(2, 9)}`,
             date: dateStr,
             description,
             amount,
@@ -453,7 +454,7 @@ export const generateDemoData = () => {
     ];
 
     const randomExpenses = [
-        { desc: 'Supermercado Tienda Inglesa', min: -1500, max: -4500, cat: 'Supermercado', freq: 4 },
+        { desc: 'Supermercado Tienda Inglesa', min: -4500, max: -1500, cat: 'Supermercado', freq: 4 },
         { desc: 'Supermercado Devoto', min: -800, max: -2500, cat: 'Supermercado', freq: 2 },
         { desc: 'Cena Restaurante', min: -1200, max: -3500, cat: 'Restaurantes', freq: 3 },
         { desc: 'Café / Merienda', min: -250, max: -800, cat: 'Restaurantes', freq: 6 },
