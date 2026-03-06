@@ -445,24 +445,24 @@ export const generateDemoData = () => {
     const now = new Date();
 
     const fixedExpenses = [
-        { desc: 'Alquiler Apto', amount: -25000, cat: 'Otros', day: 5 },
-        { desc: 'Sueldo Mensual', amount: 85000, cat: 'Ingresos', day: 1 },
-        { desc: 'UTE (Electricidad)', amount: -3200, cat: 'Servicios', day: 10 },
-        { desc: 'OSE (Agua)', amount: -850, cat: 'Servicios', day: 15 },
-        { desc: 'Antel (Internet)', amount: -1650, cat: 'Servicios', day: 20 },
-        { desc: 'Seguro Salud', amount: -4500, cat: 'Salud', day: 3 }
+        { desc: 'Alquiler Apto', amount: -12000, cat: 'Otros', day: 5 },
+        { desc: 'Sueldo Mensual', amount: 45000, cat: 'Ingresos', day: 1 },
+        { desc: 'UTE (Electricidad)', amount: -2200, cat: 'Servicios', day: 10 },
+        { desc: 'OSE (Agua)', amount: -650, cat: 'Servicios', day: 15 },
+        { desc: 'Antel (Internet)', amount: -1300, cat: 'Servicios', day: 20 },
+        { desc: 'Seguro Salud', amount: -3500, cat: 'Salud', day: 3 }
     ];
 
     const randomExpenses = [
-        { desc: 'Supermercado Tienda Inglesa', min: -4500, max: -1500, cat: 'Supermercado', freq: 4 },
-        { desc: 'Supermercado Devoto', min: -800, max: -2500, cat: 'Supermercado', freq: 2 },
-        { desc: 'Cena Restaurante', min: -1200, max: -3500, cat: 'Restaurantes', freq: 3 },
-        { desc: 'Café / Merienda', min: -250, max: -800, cat: 'Restaurantes', freq: 6 },
-        { desc: 'Combustible ANCAP', min: -2000, max: -3500, cat: 'Transporte', freq: 2 },
-        { desc: 'Uber / Taxi', min: -200, max: -900, cat: 'Transporte', freq: 5 },
-        { desc: 'Farmacia', min: -300, max: -1500, cat: 'Salud', freq: 1 },
-        { desc: 'Cine / Teatro', min: -800, max: -2200, cat: 'Otros', freq: 1 },
-        { desc: 'Compra Online', min: -500, max: -5000, cat: 'Otros', freq: 2 }
+        { desc: 'Supermercado Tienda Inglesa', min: -2500, max: -1000, cat: 'Supermercado', freq: 4 },
+        { desc: 'Supermercado Devoto', min: -1500, max: -600, cat: 'Supermercado', freq: 1 },
+        { desc: 'Cena Restaurante', min: -2000, max: -800, cat: 'Restaurantes', freq: 2 },
+        { desc: 'Café / Merienda', min: -450, max: -150, cat: 'Restaurantes', freq: 4 },
+        { desc: 'Combustible / Bus', min: -2000, max: -1000, cat: 'Transporte', freq: 2 },
+        { desc: 'Uber / Taxi', min: -600, max: -150, cat: 'Transporte', freq: 3 },
+        { desc: 'Farmacia', min: -1000, max: -200, cat: 'Salud', freq: 1 },
+        { desc: 'Cine / Teatro', min: -1500, max: -600, cat: 'Otros', freq: 1 },
+        { desc: 'Compra Online', min: -2500, max: -300, cat: 'Otros', freq: 1 }
     ];
 
     for (let i = 0; i < 12; i++) {
