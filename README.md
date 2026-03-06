@@ -6,7 +6,6 @@
 
 - **Privacidad por Diseño**: Sin registros, sin trackers, sin servidores externos. La base de datos es tu propio navegador (`localStorage`).
 - **Enfoque Uruguayo**: Soporte nativo para la importación directa de archivos Excel del **BROU** (e-BROU), manejando automáticamente encabezados y leyendas legales.
-- **Bimonetarismo (Próximamente)**: Diseñado pensando en la realidad económica del Río de la Plata.
 - **Transparencia Total**: Código abierto y funcional incluso sin conexión a internet.
 
 ## 🚀 Características
