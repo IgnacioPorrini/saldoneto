@@ -422,7 +422,7 @@ export const processBROUExcelData = (workbook, categoriesConfig) => {
         if (amount > 0 && category === 'Otros') category = 'Ingresos';
 
         const tx = {
-            jsid: `tx-${Date.now()}-${transactions.length}-${Math.random().toString(36).substr(2, 9)}`,
+            id: `tx-${Date.now()}-${transactions.length}-${Math.random().toString(36).substr(2, 9)}`,
             date: dateStr,
             description,
             amount,
